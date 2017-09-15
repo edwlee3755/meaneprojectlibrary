@@ -1,0 +1,161 @@
+<div class="panel-header">
+  <h1>Edit User</h1>
+</div>
+
+<br>
+
+<ul class="nav nav-tabs">
+  <li role="presentation" ng-click="editUser.namePhase();" ng-class="nameTab" ><a href="#">Name</a></li>
+  <li role="presentation" ng-click="editUser.usernamePhase();" ng-class="usernameTab" ><a href="#">Username</a></li>
+  <li role="presentation" ng-click="editUser.emailPhase();" ng-class="emailTab" ><a href="#">E-mail</a></li>
+  <li role="presentation" ng-click="editUser.permissionsPhase();" ng-class="permissionsTab" ><a href="#">Permissions</a></li>
+</ul>
+
+<br><br>
+
+<!-- ng-show causes the alert messages to show only if there is one -->
+<div class="row show-hide-message" ng-show="editUser.successMsg">
+  <!-- Angular passes controllers to the html page using {{ }} -->
+  <div class="alert alert-success">{{ editUser.successMsg }}</div>
+</div>
+
+<div class="row show-hide-message" ng-show="editUser.errorMsg">
+  <div class="alert alert-danger">{{ editUser.errorMsg }}</div>
+</div>
+
+<br>
+
+<!-- Phase One Tab: Name Edit Form -->
+<form name="editUser.nameForm" ng-show="editUser.phase1"  ng-submit="editUser.updateName(newFirstName, newMiddleName, newLastName, editUser.nameForm.firstName.$valid, editUser.nameForm.middleName.$valid, editUser.nameForm.lastName.$valid);" novalidate>
+    <!-- NAME -->
+  <label>Name<span style="color:red;">*</span></label>
+  <div class="row"> <!-- row div to allow multiple elements in one row-->
+    <div class="col-xs-4">
+      <label>First</label>
+    </div>
+    <div class="col-xs-4">
+      <label>Middle</label>
+    </div>
+    <div class="col-xs-4">
+      <label>Last</label>
+    </div>
+  </div> <!-- class row -->
+
+  <div class="row"> <!-- row div to allow multiple elements in one row for our firstname, middlename, lastname-->
+
+    <!-- First Name Text Field -->
+    <div class="col-xs-4">
+      <!-- display success (green highlight if form field is valid and isn't pristine (user has typed something in the field. Highlight red if user has typed something(not pristine) and isn't valid or if not valid and submitted )) -->
+      <div ng-class="{ 'has-success':(editUser.nameForm.firstName.$valid && !editUser.nameForm.firstName.$pristine), 'has-error':(!editUser.nameForm.firstName.$valid && !editUser.nameForm.firstName.$pristine)
+                      || (!editUser.nameForm.firstName.$valid && editUser.nameForm.$submitted) }">
+        <!-- ngmodel firstName binds to firstName value in editUser.component.ts -->
+        <!-- [(ngModel)]="firstName" name="firstName" binds the firstName value to our function to pull the values out   -->
+        <input type="text" ng-model="newFirstName" name="firstName" maxlength="35" class="form-control" ng-pattern="/^([a-zA-Z]{2,20})+$/" ng-minLength="2" ng-maxLength="20" placeholder="Enter your First Name" required> <!-- ng-pattern means field can only contain the regEx to be valid -->
+        <!-- ie. nameForm.____.$pristine must match the name="___" of the input field-->
+        <p class="help-block" ng-show="(!editUser.nameForm.firstName.$pristine && editUser.nameForm.firstName.$error.required) || (editUser.nameForm.$submitted && editUser.nameForm.firstName.$error.required)">This field is required</p>    <!-- If the form has been modified and there is a requirement error, display the paragraph-->
+        <ul class="help-block" ng-show="(!editUser.nameForm.firstName.$pristine && editUser.nameForm.firstName.$error.pattern) || (!editUser.nameForm.firstName.$pristine && editUser.nameForm.firstName.$error.minlength) ||
+          (!nameForm.firstName.$pristine && nameForm.firstName.$error.maxlength) ">
+          <li>Name can only contain alphabetical characters </li>
+          <li>Must be between 2 and 20 characters</li>
+        </ul>
+      </div>  <!-- ng-class div -->
+    </div>    <!-- col-xs-4 div -->
+
+    <!-- Middle Name Text Field -->
+    <div class="col-xs-4">
+      <div ng-class="{ 'has-error':(!editUser.nameForm.middleName.$valid) || (!editUser.nameForm.middleName.$valid && editUser.nameForm.$submitted) }">
+        <input type="text" ng-model="newMiddleName" name="middleName" maxlength="35" class="form-control" ng-pattern="/^([a-zA-Z]{0,35})+$/" ng-minLength="0" ng-maxLength="35" placeholder="Middle Name (optional)">
+        <ul class="help-block" ng-show="(!editUser.nameForm.middleName.$pristine && editUser.nameForm.middleName.$error.pattern) || (!editUser.nameForm.middleName.$pristine && editUser.nameForm.middleName.$error.minlength) ||
+          (!editUser.nameForm.middleName.$pristine && editUser.nameForm.middleName.$error.maxlength) ">
+          <li>Name can only contain alphabetical characters </li>
+          <li>Must be between 2 and 20 characters</li>
+        </ul> <!-- list -->
+      </div>
+    </div>
+
+    <!-- Last Name Text Field -->
+    <div class="col-xs-4">
+      <div ng-class="{ 'has-success':(editUser.nameForm.lastName.$valid && !editUser.nameForm.lastName.$pristine), 'has-error':(!editUser.nameForm.lastName.$valid && !editUser.nameForm.lastName.$pristine)
+                      || (!editUser.nameForm.lastName.$valid && editUser.nameForm.$submitted) }">
+        <input type="text" ng-model="newLastName" name="lastName" maxlength="35" class="form-control" ng-pattern="/^([a-zA-Z]{2,20})+$/" ng-minLength="2" ng-maxLength="20" placeholder="Enter your Last Name" required >
+        <p class="help-block" ng-show="(!editUser.nameForm.lastName.$pristine && editUser.nameForm.lastName.$error.required) || (editUser.nameForm.$submitted && editUser.nameForm.lastName.$error.required)">This field is required</p>
+        <ul class="help-block" ng-show="(!editUser.nameForm.lastName.$pristine && editUser.nameForm.lastName.$error.pattern) || (!editUser.nameForm.lastName.$pristine && editUser.nameForm.lastName.$error.minlength) ||
+          (!editUser.nameForm.lastName.$pristine && editUser.nameForm.lastName.$error.maxlength) ">
+          <li>Name can only contain alphabetical characters </li>
+          <li>Must be between 2 and 35 characters</li>
+        </ul> <!-- list -->
+      </div>  <!-- ng-class div -->
+    </div>    <!-- col-xs-4 div -->
+  </div>      <!-- class row -->
+
+  <br>
+
+  <!-- Submit Button -->
+  <input type="submit" ng-disabled="editUser.disabled" class="btn btn-primary" value="Update">
+</form>
+
+  <!-- END of Phase One Tab: Name Edit Form -->
+
+
+<!-- Phase Two Tab: Username Edit Form -->
+
+  <!-- Username -->
+<form name="editUser.usernameForm" ng-show="editUser.phase2"  ng-submit="editUser.updateUsername(newUsername, editUser.usernameForm.username.$valid);" novalidate>
+  <label>Username<span style="color:red;">*</span></label>
+  <div ng-class="{ 'has-success':(editUser.usernameForm.username.$valid && !editUser.usernameForm.username.$pristine), 'has-error':(!editUser.usernameForm.username.$valid && !editUser.usernameForm.username.$pristine)
+                  || (!editUser.usernameForm.username.$valid && editUser.usernameForm.$submitted) }">
+    <input type="text" ng-model="newUsername" name="username" class="form-control" maxlength="35" class="form-control" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z0-9]|=.*?[A-Z]).{3,20}$/" ng-minLength="2" ng-maxLength="20"  placeholder="This will be your username to login" required>
+    <p class="help-block" ng-show="(!editUser.usernameForm.username.$pristine && editUser.usernameForm.username.$error.required) || (editUser.usernameForm.$submitted && editUser.usernameForm.username.$error.required)">This field is required</p>
+    <ul class="help-block" ng-show="(!editUser.usernameForm.username.$pristine && editUser.usernameForm.username.$error.pattern) || (!editUser.usernameForm.username.$pristine && editUser.usernameForm.username.$error.minlength) ||
+      (!editUser.usernameForm.username.$pristine && editUser.usernameForm.username.$error.maxlength) ">
+      <li>Must not contain any special characters or spaces</li>
+      <li>Must contain at least 3 characters but not more than 20</li>
+    </ul> <!-- list -->
+  </div>
+
+  <br>
+
+  <!-- Submit Button -->
+  <input type="submit" ng-disabled="editUser.disabled" class="btn btn-primary" value="Update">
+</form>
+<!-- END of Phase Two Tab: Username Edit Form -->
+
+
+<!-- Phase Three Tab: Email Edit Form -->
+<!-- EMAIL -->
+<form name="editUser.emailForm" ng-show="editUser.phase3"  ng-submit="editUser.updateEmail(newEmail, editUser.emailForm.email.$valid);" novalidate>
+  <label>E-mail Address<span style="color:red;">*</span></label>
+  <div ng-class="{ 'has-success':(editUser.emailForm.email.$valid && !editUser.emailForm.email.$pristine), 'has-error':(!editUser.emailForm.email.$valid && !editUser.emailForm.email.$pristine)
+                  || (!editUser.emailForm.email.$valid && editUser.emailForm.$submitted) }">
+      <input type="text" ng-model="newEmail" name="email" class="form-control" maxlength="40" class="form-control" ng-pattern="/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/" ng-minLength="6" ng-maxLength="35" placeholder="myemail@example.com" required>
+      <p class="help-block" ng-show="(!editUser.emailForm.email.$pristine && editUser.emailForm.email.$error.required) || (editUser.emailForm.$submitted && editUser.emailForm.email.$error.required)">This field is required</p>
+      <ul class="help-block" ng-show="(!editUser.emailForm.email.$pristine && editUser.emailForm.email.$error.pattern) || (!editUser.emailForm.email.$pristine && editUser.emailForm.email.$error.minlength) ||
+        (!editUser.emailForm.email.$pristine && editUser.emailForm.email.$error.maxlength) ">
+        <li>Must contain "@"</li>
+        <li>Must not contain any special characters</li>
+        <li>Must be between 6 and 35 characters</li>
+      </ul> <!-- list -->
+  </div>    <!-- ng-class div -->
+
+  <br>
+
+  <!-- Submit Button -->
+  <input type="submit" ng-disabled="editUser.disabled" class="btn btn-primary" value="Update">
+
+</form>
+
+<!-- END of Phase Three Tab: Email Edit Form -->
+
+
+<!-- Phase Four Tab: Permission Edit Form -->
+<div ng-show="editUser.phase4">
+    <label><u>Current Permission level:</u> <h2><b>{{ newPermission }}</b></h2></label>
+
+    <br><br>
+    <button ng-disabled="editUser.disableUser" ng-click="editUser.updatePermissions('user');" type="button" class="btn btn-success btn-xs">User</button>&nbsp
+    <button ng-disabled="editUser.disableModerator" ng-click="editUser.updatePermissions('moderator');" type="button" class="btn btn-info btn-xs">Moderator</button>&nbsp
+    <button ng-disabled="editUser.disableAdmin" ng-click="editUser.updatePermissions('admin');" type="button" class="btn btn-warning btn-xs">Admin</button>&nbsp
+</div>
+
+
+<!-- END of Phase Four Tab: Permission Edit Form -->

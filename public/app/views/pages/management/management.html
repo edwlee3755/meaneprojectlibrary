@@ -1,0 +1,138 @@
+<br><br>
+
+<!-- Loading and success / error messages on form register-->
+<!-- When loading after register is clicked, display loading if true -->
+<div class=" jumbotron text-center" ng-show="management.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading...</p>
+</div>
+
+<br>
+
+<!-- ng-show causes the alert messages to show only if there is one -->
+<div class="row show-hide-message" ng-show="management.successMsg">
+  <!-- Angular passes controllers to the html page using {{ }} -->
+  <div class="alert alert-success">{{ management.successMsg }}</div>
+</div>
+
+<br>
+
+<div class="page-header">
+  <h1> User Management </h1>
+</div>
+
+<div class="row show-hide-message" ng-show="management.showMoreError">
+  <div class="alert alert-danger">{{ management.showMoreError }}</div>
+</div>
+
+<!--- Filter Results -->
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="showmore">
+      <div>
+        <div class="input-group">
+          <span class="input-group-addon">Results to display: </span>
+          <!-- ng-model="number" means the value in the input text field -->
+          <input type="text" class="form-control" ng-model="number">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <button type="button" ng-click="management.showMore(number);" class="btn btn-success">Apply filter</button>
+    <button type="button" ng-click="management.showAll();" class="btn btn-warning">Show All</button>
+  </div>
+
+</div>
+
+<br>
+
+<!--- Filter Results -->
+<div class="row">
+      <div class="col-lg-6">
+          <div class="input-group">
+              <span class="input-group-addon">Search for Keyword: </span>
+              <input type="text" class="form-control" name="search" placeholder="Search for..." ng-model="searchKeyword">
+          </div>
+      </div>
+        <button type="button" ng-click="management.search(searchKeyword, number)" class="btn btn-success">Search</button>
+        <a href="/search">
+            <button type="button" class="btn btn-warning">Advanced Search</button>
+        </a>
+        <button type="button" ng-click="management.clear()" class="btn btn-danger">Clear Results</button>
+</div>
+
+<br>
+
+<div>
+    <p><strong>Total Results Matched: </strong>{{( management.users | filter: searchFilter).length }}</p>
+</div>
+
+<div>
+    <p><strong>Total Results Displayed: </strong>{{( management.users | filter: searchFilter | limitTo: management.showLimit).length }}</p>
+</div>
+
+
+<br><br>
+
+<div class="panel panel-info">
+  <div class="panel-heading"
+    <h3 class="panel-title">User Management</h3>
+  </div>
+  <div class="panel-body">
+    <table class="table table-hover">
+      <thead>   <!-- thead to make the headers non-hoverable -->
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Permision Level</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="person in management.users | filter: searchFilter |limitTo: management.showLimit" class="rowBottomBorder">
+          <td>{{ person.firstName }}</td>
+          <td>{{ person.lastName }}</td>
+          <td>{{ person.username }}</td>
+          <td>{{ person.email }}</td>
+          <td>{{ person.permission }}</td>
+          <td>
+            <!-- when button is clicked link to route pate /edit/id of the user that was clicked for edit -->
+            <a href="/editUser/{{ person._id }}">
+              <button type="button" ng-show="management.editAccess" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span>  Edit</button>
+            </a>
+            <button type="button" ng-click="management.deleteUser(person.username);" ng-show="management.deleteAccess" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span>  Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  <!-- Panel-Body -->
+</div>    <!-- Panel -->
+
+<br><br>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="showmore">
+      <div>
+        <div class="input-group">
+          <span class="input-group-addon">Results to display: </span>
+          <!-- ng-model="number" means the value in the input text field -->
+          <input type="text" class="form-control" ng-model="number">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <button type="button" ng-click="management.showMore(number);" class="btn btn-success">Apply filter</button>
+    <button type="button" ng-click="management.showAll();" class="btn btn-warning">Show All</button>
+  </div>
+
+</div>
+
+<br>

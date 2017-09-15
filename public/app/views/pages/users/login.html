@@ -1,0 +1,46 @@
+<br><br>
+
+<!-- Loading and success / error messages on form register-->
+<!-- When loading after register is clicked, display loading if true -->
+<div class=" jumbotron text-center" ng-show="main.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading...</p>
+</div>
+
+<br>
+
+<!-- ng-show causes the alert messages to show only if there is one -->
+<div class="row show-hide-message" ng-show="main.successMsg">
+  <!-- Angular passes controllers to the html page using {{ }} -->
+  <div class="alert alert-success">{{ main.successMsg }}</div>
+</div>
+
+<div class="row show-hide-message" ng-show="main.errorMsg">
+  <div class="alert alert-danger">{{ main.errorMsg }}</div>
+</div>
+
+<br>
+
+<form ng-init="main.hideLoginInput();" ng-submit="main.doLogin(loginData);"class="form-vertical" style="background-color:rgb(250,250,250)">
+<fieldset>
+    <legend style="padding-left: 20px; padding-right: 20px; padding-top: 20px;">Login with your username</legend>
+
+    <div style="padding-left: 20px; padding-right: 20px;" class="form-group"> <!-- pad elements from border in form -->
+      <label> Username:</label>
+      <div>
+        <input type="text" maxlength="70" ng-model="main.loginData.username" name="username" class="form-control" placeholder="Username">
+      </div>
+
+      <br>
+
+      <label> Password:</label>
+      <div>
+        <input type="password" maxlength="70" ng-model="main.loginData.password" name="password" class="form-control" placeholder="Password">
+      </div>
+
+      <br>
+      <!-- the input type submit allows us to run onLoginSubmit() function by matching it -->
+      <input ng-disabled="main.disabled" type="submit" class="btn btn-primary" value="Login">
+    </div>
+  </fieldset>
+</form>
