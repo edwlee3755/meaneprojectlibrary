@@ -15,124 +15,160 @@
   <div class="alert alert-success">{{ management.successMsg }}</div>
 </div>
 
-<br>
+<div class="row show-hide-message" ng-show="management.showMoreError">
+  <div class="alert alert-danger">{{ management.showMoreError }}</div>
+</div>
+
+
+<div style="background-color:rgb(250,250,250); padding-left: 20px; padding-right: 20px; padding-top: 20px">
 
 <div class="page-header">
   <h1> User Management </h1>
 </div>
 
-<div class="row show-hide-message" ng-show="management.showMoreError">
-  <div class="alert alert-danger">{{ management.showMoreError }}</div>
-</div>
-
 <!--- Filter Results -->
 
+<!-- NAME -->
+<div class="row"> <!-- row div to allow multiple elements in one row-->
+  <div class="col-xs-4">
+    <label>First Name</label>
+  </div>
+  <div class="col-xs-4">
+    <label>Middle Name</label>
+  </div>
+  <div class="col-xs-4">
+    <label>Last Name</label>
+  </div>
+</div> <!-- class row -->
+
+<div class="row"> <!-- row div to allow multiple elements in one row for our firstname, middlename, lastname-->
+  <!-- First Name Text Field -->
+  <div class="col-xs-4">
+      <input type="text" class="form-control" ng-model="searchByFirstName" name="searchByFirstName" maxlength="35" placeholder="Search for a First Name">
+  </div>    <!-- col-xs-4 div -->
+
+  <!-- Middle Name Text Field -->
+  <div class="col-xs-4">
+    <input type="text" class="form-control" ng-model="searchByMiddleName" name="searchByMiddleName" maxlength="35" placeholder="Search for a Middle Name">
+  </div>
+
+  <!-- Last Name Text Field -->
+  <div class="col-xs-4">
+      <input type="text" ng-model="searchByLastName" name="searchByLastName" maxlength="35" class="form-control" maxlength="35" placeholder="Search for a Middle Name">
+  </div>    <!-- col-xs-4 div -->
+</div>      <!-- class row -->
+
+<br>
 <div class="row">
-  <div class="col-lg-6">
-    <div class="showmore">
-      <div>
-        <div class="input-group">
-          <span class="input-group-addon">Results to display: </span>
-          <!-- ng-model="number" means the value in the input text field -->
-          <input type="text" class="form-control" ng-model="number">
-        </div>
-      </div>
+  <!-- Username -->
+  <div class="col-xs-3">
+      <label>Username</label>
+      <input type="text" ng-model="searchByUsername" name="searchByUsername" class="form-control" maxlength="35" placeholder="Search for a Username">
+  </div>
+
+  <div class="col-xs-4">
+  <!-- EMAIL -->
+      <label>E-mail Address</label>
+      <input type="text" ng-model="searchByEmail" name="searchByEmail" class="form-control" maxlength="35" placeholder="Search for an E-mail">
+  </div>
+
+  <div class="col-xs-2">
+  <!-- LIMIT RESULTS -->
+      <label>Limit Results #</label>
+      <input type="text" ng-model="searchNumber" class="form-control" maxlength="10" placeholder="Number to Display">
+  </div>
+
+  <!-- SORT Dropdown -->
+  <div class="col-xs-3">
+    <br>
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger">Sort by</button>
+        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 40px;">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- First Dropdown Option: Username -->
+            <li><a ng-click="management.sortOrder('username');" href="#">Username</a></li>
+            <!-- Second Dropdown Option: E-mail -->
+            <li><a ng-click="management.sortOrder('email');" href="#">E-mail</a></li>
+            <!-- Third Dropdown Option: First Name -->
+            <li><a ng-click="management.sortOrder('firstName');" href="#">First Name</a></li>
+            <!-- Fourth Dropdown Option: Last Name -->
+            <li><a ng-click="management.sortOrder('lastName');" href="#">Last Name</a></li>
+        </ul>
+        <button type="button" ng-click="management.advancedSearch(searchByUsername, searchByEmail, searchByFirstName, searchByMiddleName, searchByLastName, searchNumber);" class="btn btn-success">Search</button>
     </div>
   </div>
+</div>      <!-- class row -->
 
-  <div class="col-lg-6">
-    <button type="button" ng-click="management.showMore(number);" class="btn btn-success">Apply filter</button>
-    <button type="button" ng-click="management.showAll();" class="btn btn-warning">Show All</button>
-  </div>
 
+<br>
+
+<!-- Search Results -->
+<div>
+  <p><strong>Results: </strong>{{ (management.users | filter: advancedSearchFilter | limitTo: management.searchLimit).length }}</p>
+</div>
+
+<!-- Sort Order Notification -->
+<div ng-show="management.sort">
+  <p><strong>Sort by: </strong>{{ management.sort }}</p>
+</div>
+
+<div ng-show="management.filterDetected">
+  <p><strong style="padding-right: 15px;">Filtering By: </strong>
+      <label style="padding-right: 10px;" ng-show="management.filteringByUsername">Username: <i>{{ advancedSearchFilter.username }}</i> , </label>
+      <label style="padding-right: 10px;" ng-show="management.filteringByEmail">Email: <i>{{ advancedSearchFilter.email }}</i> , </label>
+      <label style="padding-right: 10px;" ng-show="management.filteringByFirstName">First Name: <i>{{ advancedSearchFilter.firstName }}</i> , </label>
+      <label style="padding-right: 10px;" ng-show="management.filteringByMiddleName">Middle Name: <i>{{ advancedSearchFilter.middleName }}</i> , </label>
+      <label style="padding-right: 10px;" style="padding-right: 20px;"ng-show="management.filteringByLastName">Last Name: <i>{{ advancedSearchFilter.lastName }}</i> </label>
+      <button type="button" ng-click="management.clearFilterFields();" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+  </p>
 </div>
 
 <br>
 
-<!--- Filter Results -->
-<div class="row">
-      <div class="col-lg-6">
-          <div class="input-group">
-              <span class="input-group-addon">Search for Keyword: </span>
-              <input type="text" class="form-control" name="search" placeholder="Search for..." ng-model="searchKeyword">
-          </div>
-      </div>
-        <button type="button" ng-click="management.search(searchKeyword, number)" class="btn btn-success">Search</button>
-        <a href="/search">
-            <button type="button" class="btn btn-warning">Advanced Search</button>
-        </a>
-        <button type="button" ng-click="management.clear()" class="btn btn-danger">Clear Results</button>
-</div>
-
-<br>
-
-<div>
-    <p><strong>Total Results Matched: </strong>{{( management.users | filter: searchFilter).length }}</p>
-</div>
-
-<div>
-    <p><strong>Total Results Displayed: </strong>{{( management.users | filter: searchFilter | limitTo: management.showLimit).length }}</p>
-</div>
-
-
-<br><br>
-
+<!-- User Management Table -->
 <div class="panel panel-info">
-  <div class="panel-heading"
-    <h3 class="panel-title">User Management</h3>
+  <!-- Heading -->
+  <div class="panel-heading">
+      <h3 class="panel-title">User Management</h3>
   </div>
-  <div class="panel-body">
-    <table class="table table-hover">
-      <thead>   <!-- thead to make the headers non-hoverable -->
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Permision Level</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr ng-repeat="person in management.users | filter: searchFilter |limitTo: management.showLimit" class="rowBottomBorder">
-          <td>{{ person.firstName }}</td>
-          <td>{{ person.lastName }}</td>
-          <td>{{ person.username }}</td>
-          <td>{{ person.email }}</td>
-          <td>{{ person.permission }}</td>
-          <td>
-            <!-- when button is clicked link to route pate /edit/id of the user that was clicked for edit -->
-            <a href="/editUser/{{ person._id }}">
-              <button type="button" ng-show="management.editAccess" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span>  Edit</button>
-            </a>
-            <button type="button" ng-click="management.deleteUser(person.username);" ng-show="management.deleteAccess" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span>  Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>  <!-- Panel-Body -->
-</div>    <!-- Panel -->
-
-<br><br>
-
-<div class="row">
-  <div class="col-lg-6">
-    <div class="showmore">
-      <div>
-        <div class="input-group">
-          <span class="input-group-addon">Results to display: </span>
-          <!-- ng-model="number" means the value in the input text field -->
-          <input type="text" class="form-control" ng-model="number">
-        </div>
-      </div>
-    </div>
+  <!-- Start: Table -->
+      <div class="panel-body">
+          <table class="table table-hover">
+              <thead>
+                  <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Permission Level</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="person in management.users | filter: advancedSearchFilter | limitTo: management.searchLimit | orderBy: management.sort" class="rowBottomBorder">
+                      <td>{{ person.firstName }}</td>
+                      <td>{{ person.lastName }}</td>
+                      <td>{{ person.username }}</td>
+                      <td>{{ person.email }}</td>
+                      <td>{{ person.permission }}</td>
+                      <td>
+                          <!-- Edit Button -->
+                          <a href="/edit/{{ person._id }}">
+                          <button type="button" ng-show="management.editAccess" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span>  Edit</button>
+                          </a>
+                          <!-- Delete Button -->
+                          <button type="button" ng-click="management.deleteUser(person.username);" ng-show="management.deleteAccess" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span>  Delete</button>
+                      </td>
+                  </tr>
+              </tbody>
+      </table>
   </div>
+  <!-- End: Table -->
+</div>
+<!-- User Management Table -->
 
-  <div class="col-lg-6">
-    <button type="button" ng-click="management.showMore(number);" class="btn btn-success">Apply filter</button>
-    <button type="button" ng-click="management.showAll();" class="btn btn-warning">Show All</button>
-  </div>
+<br><br><br><br><br>
 
 </div>
-
-<br>

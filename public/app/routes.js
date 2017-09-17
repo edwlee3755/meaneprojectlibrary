@@ -49,6 +49,14 @@ var app = angular.module('appRoutes', ['ngRoute'])
 			permission: ['admin', 'moderator']
 	})
 
+	.when('/search', {
+			templateUrl: 'app/views/pages/management/search.html',
+			controller: 'managementCtrl',
+			controllerAs: 'management',
+			authenticated: true,
+			permission: ['admin', 'moderator']
+	})
+
 	.otherwise({ redirectTo: '/'} ); // if users type in anything else, redirect to home
 
   // this is to get rid of angular's default '#' in the url (ie localhost/#/home)

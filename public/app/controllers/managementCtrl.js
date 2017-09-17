@@ -11,6 +11,14 @@ angular.module('managementController', [])
   app.editAccess = false;
   app.deleteAccess = false;
   app.showLimit = 25;
+  app.searchLimit = undefined;
+
+  app.filterDetected = false;
+  app.filteringByUsername = false;
+  app.filteringByEmail = false;
+  app.filteringByFirstName = false;
+  app.filteringByMiddleName = false;
+  app.filteringByLastName = false;
 
   // create a function which gets Users AND checks permission after calling getUsers in userServices
   function getUsers() {
@@ -102,6 +110,83 @@ angular.module('managementController', [])
       $scope.searchKeyword = undefined;
       $scope.searchFilter = undefined;
       app.showMoreError = false;
+  };
+
+
+  // User Search functionality
+  app.advancedSearch = function(searchByUsername, searchByEmail, searchByFirstName, searchByMiddleName, searchByLastName, searchNumber) {
+      if (searchByUsername || searchByEmail || searchByFirstName || searchByMiddleName || searchByLastName) {
+          $scope.advancedSearchFilter = {}; // Make it an empty object so we can append values into it and change as neccessary
+          if (searchByUsername) {
+              $scope.advancedSearchFilter.username = searchByUsername;    // If there is a username to search by, set the value of our object (matching our database value) to the search value
+              app.filterDetected = true;
+              app.filteringByUsername = true;
+          } else {
+              app.filteringByUsername = false;
+          }
+          if (searchByEmail) {
+              $scope.advancedSearchFilter.email = searchByEmail;
+              app.filterDetected = true;
+              app.filteringByEmail = true;
+          } else {
+              app.filteringByEmail = false;
+          }
+          if (searchByFirstName) {
+              $scope.advancedSearchFilter.firstName = searchByFirstName;
+              app.filterDetected = true;
+              app.filteringByFirstName = true;
+          } else {
+              app.filteringByFirstName = false;
+          }
+          if (searchByMiddleName) {
+              $scope.advancedSearchFilter.middleName = searchByMiddleName;
+              app.filterDetected = true;
+              app.filteringByMiddleName = true;
+          } else {
+              app.filteringByMiddleName = false;
+          }
+          if (searchByLastName) {
+              $scope.advancedSearchFilter.lastName = searchByLastName;
+              app.filterDetected = true;
+              app.filteringByLastName = true;
+          } else {
+              app.filteringByLastName = false;
+          }
+      } else {
+          app.filterDetected = false;
+          app.filteringByUsername = false;
+          app.filteringByEmail = false;
+          app.filteringByFirstName = false;
+          app.filteringByMiddleName = false;
+          app.filteringByLastName = false;
+          $scope.advancedSearchFilter = undefined;
+      }
+      if (searchNumber > 0) {
+          console.log('search limit > 0');
+          app.searchLimit = searchNumber;
+      } else {
+          console.log('no search limit');
+          app.searchLimit = undefined;
+      }
+  };
+
+  app.clearFilterFields = function() {
+      $scope.advancedSearchFilter = {};
+      $scope.searchByUsername = undefined;
+      $scope.searchByEmail = undefined;
+      $scope.searchByFirstName = undefined;
+      $scope.searchByMiddleName = undefined;
+      $scope.searchByLastName = undefined;
+      app.filterDetected = false;
+      app.filteringByUsername = false;
+      app.filteringByEmail = false;
+      app.filteringByFirstName = false;
+      app.filteringByMiddleName = false;
+      app.filteringByLastName = false;
+  };
+
+  app.sortOrder = function (order) {
+      app.sort = order;
   };
 
 })
