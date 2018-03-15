@@ -25,15 +25,23 @@ angular.module('mainController', ['authServices', 'userServices'])
           var timeCheck = expireTime.exp - timeStamp;     // from current time, count down until current time matches the timestamp of the token
           console.log(timeCheck);
 
-          if (timeCheck <= 35) {   // when current time matches time stamp of the assigned token, the token has expired
-            console.log('Token will expire in 35 seconds.')
+
+          if (timeCheck <= 39 && timeCheck >= 4) {   // when current time matches time stamp of the assigned token, the token has expired. We use 4 second buffer because it takes time to logout
+            console.log('Token will expire in ' + timeCheck + ' seconds.');
             showModal(1);
-            $interval.cancel(interval);
+            //$interval.cancel(interval);
+          }
+
+          else if (timeCheck <= 4) {
+            app.choiceMade = true;
+            hideModal();
+            $timeout(function() {
+              showModal(2);     // logout user modal after 1 second
+            }, 1000);
           }
           else {
             console.log('Token not yet expired');
           }
-
 
         }
       }, 2000);
@@ -50,7 +58,7 @@ angular.module('mainController', ['authServices', 'userServices'])
 
     if (option === 1) {                                 // modal to warn user of session expire
       app.modalHeader = 'Timeout Warning';              // modal title and body
-      app.modalBody = 'Your session will expire in 30 seconds. Would you like to continue your session or logout?';
+      app.modalBody = 'Your session will expire in 30 seconds from now. Would you like to continue your session or logout?';
       $("#myModal").modal({ backdrop: "static" });      // backdrop static makes it so when the modal is loaded, we cause the background to be non-clickable so use can't click out of modal unless they click yes / no / x
     }
     else if (option === 2){               // logout modal
@@ -65,15 +73,6 @@ angular.module('mainController', ['authServices', 'userServices'])
         $route.reload();    // reload the page incase the user is already on the home page so the controller can log them out
       }, 2000);
     }
-    $timeout(function(){
-      if (!app.choiceMade) {
-        Auth.logout();
-        $location.path('/');
-        console.log('Logged out');
-        hideModal();
-        $route.reload();    // reload the page incase the user is already on the home page so the controller can log them out
-      }
-    }, 35000);              // set the timeout of the modal to stay on the user's screen until token expires or response is clicked
 
   };
 
@@ -93,7 +92,7 @@ angular.module('mainController', ['authServices', 'userServices'])
     hideModal();
   };
 
-  app.endSession = function () {          // index modal runs this function if user selectsno to expire session
+  app.endSession = function () {          // index modal runs this function if user selects no to expire session
     app.choiceMade = true;
     hideModal();
     $timeout(function() {

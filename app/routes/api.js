@@ -93,7 +93,7 @@ module.exports = function(router) { // need to export so that we can import into
             }
             else {
               // once password is validated, give the user a jwebtoken which maps to the username and email, expires in 24hrs
-              var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '30m' });
+              var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '1m' });
               res.json({ success: true, message: 'User authenticated', token: token }); // send the token we created to the user
             }
           }
@@ -141,7 +141,7 @@ module.exports = function(router) { // need to export so that we can import into
       }
       else {
         //  give the user a jwebtoken which maps to the username and email, expires in 24hrs
-        var newToken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '5m' });
+        var newToken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '1m' });
         res.json({ success: true, token: newToken }); // send the token we created to the user
       }
     });

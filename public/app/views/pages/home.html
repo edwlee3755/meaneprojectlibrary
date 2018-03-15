@@ -1,3 +1,30 @@
+<br><br>
+
+<div class=" jumbotron text-center" ng-show="management.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading...</p>
+</div>
+
+<br>
+
+<!-- ng-show causes the alert messages to show only if there is one -->
+<div class="row show-hide-message" ng-show="management.successMsg">
+  <!-- Angular passes controllers to the html page using {{ }} -->
+  <div class="alert alert-success">{{ management.successMsg }}</div>
+</div>
+
+<div class="row show-hide-message" ng-show="management.showMoreError">
+  <div class="alert alert-danger">{{ management.showMoreError }}</div>
+</div>
+
+
+<div style="background-color:rgb(250,250,250); padding-left: 20px; padding-right: 20px; padding-top: 20px;">
+
 <div class="page-header">
   <h1> Hello {{ main.username }}. Welcome to the home page.</h1>
+
+  <button type="button" ng-click="" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
+
+</div>
+
 </div>
