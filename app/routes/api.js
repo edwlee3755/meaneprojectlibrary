@@ -1,4 +1,5 @@
 var User = require('../models/user'); // 1 period means current directory, 2 periods means 1 directory before the current directory
+var Post = require('../models/post');
 var jwt = require('jsonwebtoken');
 var secret = 'edward';
 
