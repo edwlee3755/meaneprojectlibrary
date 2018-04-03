@@ -28,7 +28,7 @@
 
         <h1>
           News Feed
-          <button type="button" style="float: right;" ng-click="main.showCreatePostModal();" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
+          <button type="button" style="float: right;" ng-click="main.showCreatePostModal(); main.clearPostText(); postForm.$setPristine();" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
 
         </h1>
 
@@ -56,12 +56,12 @@
                                   </div> <!-- /ng-class div  -->
 
                                   <br>
-<!--
+
                                   <label>Text</label>
                                   <div class="form-group">
                                     <textarea class="form-control" ng-model="main.createPostData.postDescription" name="postDescription" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 180px;" maxlength="1000"></textarea>
                                   </div>
---->
+
                                   <br>
 
 <!--

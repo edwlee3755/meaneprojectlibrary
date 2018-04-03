@@ -415,12 +415,10 @@ module.exports = function(router) { // need to export so that we can import into
     router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
       var post = new Post();
       post.title = req.body.postTitle;
-      /*
       post.description = req.body.postDescription;
       post.postAuthor = req.body.postAuthor;
       post.date = req.body.date;
 
-      */
 
       /*
       post.postImg.data = req.body.postImg.data;

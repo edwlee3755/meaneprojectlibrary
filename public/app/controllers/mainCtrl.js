@@ -105,13 +105,13 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         var currentDate = month + "/" + day + "/" + year;
 
         console.log("After date: " + currentDate);
-        //app.createPostData.date = currentDate;
-        //app.createPostData.postAuthor = app.username;
+        app.createPostData.date = currentDate;
+        app.createPostData.postAuthor = app.username;
 
-        //console.log("app.createPostData.date: " + app.createPostData.date);
-        //console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
+        console.log("app.createPostData.date: " + app.createPostData.date);
+        console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
         console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
-        //console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
+        console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
 
 /*
         //test
