@@ -1,30 +1,87 @@
-<br><br>
-
-<div class=" jumbotron text-center" ng-show="management.loading">
-  <span class="glyphicon glyphicon-repeat spinner"></span>
-  <p>Loading...</p>
-</div>
-
-<br>
-
-<!-- ng-show causes the alert messages to show only if there is one -->
-<div class="row show-hide-message" ng-show="management.successMsg">
-  <!-- Angular passes controllers to the html page using {{ }} -->
-  <div class="alert alert-success">{{ management.successMsg }}</div>
-</div>
-
-<div class="row show-hide-message" ng-show="management.showMoreError">
-  <div class="alert alert-danger">{{ management.showMoreError }}</div>
-</div>
 
 
-<div style="background-color:rgb(250,250,250); padding-left: 20px; padding-right: 20px; padding-top: 20px;">
 
-<div class="page-header">
-  <h1> Hello {{ main.username }}. Welcome to the home page.</h1>
+    <br><br>
 
-  <button type="button" ng-click="" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
+    <div class=" jumbotron text-center" ng-show="main.loading">
+      <span class="glyphicon glyphicon-repeat spinner"></span>
+      <p>Loading...</p>
+    </div>
 
-</div>
+    <br>
 
-</div>
+    <!-- ng-show causes the alert messages to show only if there is one -->
+    <div class="row show-hide-message" ng-show="main.successMsg">
+      <!-- Angular passes controllers to the html page using {{ }} -->
+      <div class="alert alert-success">{{ main.successMsg }}</div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="main.errorMsg">
+      <div class="alert alert-danger">{{ main.errorMsg }}</div>
+    </div>
+
+
+    <div style="background-color:rgb(250,250,250); padding-left: 20px; padding-right: 20px; padding-top: 20px;">
+
+      <div class="page-header">
+        <!-- <h1> Hello {{ main.username }}. Welcome to the home page.</h1> -->
+
+        <h1>
+          News Feed
+          <button type="button" style="float: right;" ng-click="main.showCreatePostModal();" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
+
+        </h1>
+
+        <!-- Create Post Modal -->
+        <div class="modal fade" id="createPostModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                  <div class="modal-content" style="background-color:rgb(250,250,250)">
+                      <div class="modal-header">
+                          <button type="button" class="close" ng-click="main.clearPostText(); postForm.$setPristine();" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title"><center>{{ main.postModalHeader }}</center></h4>
+                      </div>
+                      <div class="modal-body">
+                          <form name="postForm" ng-submit="main.createPost(createPostData, postForm.$valid);" class="form-vertical" novalidate>
+                              <div style="padding-left: 20px; padding-right: 20px; padding-top: 20px;" class=form-group>
+
+                                  <label>Title<span style="color: red;">*</span></label>
+                                  <div ng-class="{ 'has-success':(postForm.postTitle.$valid && !postForm.postTitle.$pristine), 'has-error':(!postForm.postTitle.$valid && !postForm.postTitle.$pristine)
+                                                    || (!postForm.postTitle.$valid && postTitle.$submitted) }">
+                                    <input class="form-control input-block-level" type="text" ng-model="main.createPostData.postTitle" name="postTitle" minlength="2" maxlength="70" ng-pattern="/([\s\S]{2,70})+/" ng-minLength="2" ng-maxLength="70" required> <!-- form-control input-block-level stretches input field to the end of div container -->
+                                    <p class="help-block" ng-show="(!postForm.postTitle.$pristine && postForm.postTitle.$error.required) || (postForm.$submitted && postForm.postTitle.$error.required)">This field is required</p>
+                                    <ul class="help-block" ng-show="(!postForm.postTitle.$pristine && postForm.postTitle.$error.pattern) || (!postForm.postTitle.$pristine && postForm.postTitle.$error.minlength) ||
+                                        (!postForm.postTitle.$pristine && postForm.postTitle.$error.maxlength) ">
+                                        <li>Title must be between 2 and 70 characters</li>
+                                    </ul>
+                                  </div> <!-- /ng-class div  -->
+
+                                  <br>
+<!--
+                                  <label>Text</label>
+                                  <div class="form-group">
+                                    <textarea class="form-control" ng-model="main.createPostData.postDescription" name="postDescription" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 180px;" maxlength="1000"></textarea>
+                                  </div>
+--->
+                                  <br>
+
+<!--
+                                  <label>File input</label>
+                                  <div class="form-group">
+                                    <input type="file" class="form-control-file" ng-model="main.createPostData.postImg.data" name="postImg" aria-describedby="fileHelp">
+                                    <small id="fileHelp" class="form-text text-muted">Only images with .png, .jpg, or .jpeg format will be accepted.</small>
+                                  </div>
+-->
+                                  <br>
+
+                                  <button type="submit" class="btn btn-primary" ng-click="main.createPost(createPostData, postForm.$valid);" data-dismiss="modal">Submit</button>
+                                  <button type="button" class="btn btn-secondary" ng-click="main.clearPostText(); postForm.$setPristine();" data-dismiss="modal">Cancel</button>
+                              </div>      <!-- /style padding div -->
+                          </form>
+                      </div>            <!-- /Modal Body -->
+                  </div>                <!-- /Modal Content -->
+            </div>                      <!-- Modal Dialog model-lg -->
+        </div>                          <!-- Modal fade -->
+
+      </div>                            <!--  Page Header -->
+
+    </div>                              <!-- Style Background -->

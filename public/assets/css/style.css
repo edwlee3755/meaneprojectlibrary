@@ -3,8 +3,16 @@
 }
 
 .rowBottomBorder {
-  border-bottom:1pt solid Gainsboro;  
+  border-bottom:1pt solid Gainsboro;
 }
+
+/* Non resizable text area*/
+
+textarea[name=postDescription] { /* For textarea with name=noSizeTextArea */
+  resize: none;
+}
+
+/* END OF Non resizable text area */
 
 /* Back to top CSS */
 .go-top {

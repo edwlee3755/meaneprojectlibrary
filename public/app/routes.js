@@ -67,7 +67,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
 });
 
 // restrict routes
-app.run(['$rootScope', 'Auth', '$location', 'User', function($rootScope, Auth, $location, User){
+app.run(['$rootScope', 'Auth', '$location', 'User', 'Post', function($rootScope, Auth, $location, User, Post){
 		$rootScope.$on('$routeChangeStart', function(event, next, current){
 				if (next.$$route.authenticated == true){	// if this page needs to be authenticated to access
 						if (!Auth.isLoggedIn()) {			// if the user is not logged in

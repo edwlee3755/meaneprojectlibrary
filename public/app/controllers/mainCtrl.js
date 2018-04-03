@@ -1,6 +1,6 @@
-angular.module('mainController', ['authServices', 'userServices'])
+angular.module('mainController', ['authServices', 'userServices', 'postServices'])
 
-.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope){
+.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http){
   var app = this;
 
   app.loadme = false; // hide main html page until data is obtained in angularjs
@@ -28,7 +28,7 @@ angular.module('mainController', ['authServices', 'userServices'])
 
           if (timeCheck <= 39 && timeCheck >= 4) {   // when current time matches time stamp of the assigned token, the token has expired. We use 4 second buffer because it takes time to logout
             console.log('Token will expire in ' + timeCheck + ' seconds.');
-            showModal(1);
+            showLogoutModal(1);
             //$interval.cancel(interval);
           }
 
@@ -36,7 +36,7 @@ angular.module('mainController', ['authServices', 'userServices'])
             app.choiceMade = true;
             hideModal();
             $timeout(function() {
-              showModal(2);     // logout user modal after 1 second
+              showLogoutModal(2);     // logout user modal after 1 second
             }, 1000);
           }
           else {
@@ -50,7 +50,7 @@ angular.module('mainController', ['authServices', 'userServices'])
 
   app.checkSession();
 
-  var showModal = function(option) {                        // function to show our modal
+  var showLogoutModal = function(option) {                        // function to show our modal
     app.choiceMade = false;                           // var to check if the user has selected a choice on our modal to renew or expire
     app.modalHeader = undefined;              // modal title and body
     app.modalBody = undefined
@@ -59,13 +59,13 @@ angular.module('mainController', ['authServices', 'userServices'])
     if (option === 1) {                                 // modal to warn user of session expire
       app.modalHeader = 'Timeout Warning';              // modal title and body
       app.modalBody = 'Your session will expire in 30 seconds from now. Would you like to continue your session or logout?';
-      $("#myModal").modal({ backdrop: "static" });      // backdrop static makes it so when the modal is loaded, we cause the background to be non-clickable so use can't click out of modal unless they click yes / no / x
+      $("#logoutModal").modal({ backdrop: "static" });      // backdrop static makes it so when the modal is loaded, we cause the background to be non-clickable so use can't click out of modal unless they click yes / no / x
     }
     else if (option === 2){               // logout modal
       //logout portion
       app.hideButtons = true;                       // hide the yes / no buttons of our modal when displaying the logout modal
       app.modalHeader = undefined;              // modal title and body
-      $("#myModal").modal({ backdrop: "static" });
+      $("#logoutModal").modal({ backdrop: "static" });
       $timeout(function(){
         Auth.logout();
         $location.path('/');
@@ -74,6 +74,90 @@ angular.module('mainController', ['authServices', 'userServices'])
       }, 2000);
     }
 
+  };
+
+  app.showCreatePostModal = function() {
+      console.log("showCreatePostModal function");
+      app.postModalHeader = "Create a Post";
+      $("#createPostModal").modal({backdrop: "static" });
+  };
+
+  this.clearPostText = function() {
+      console.log("Cleared Post Text");
+      console.log(app.createPostData);
+      console.log(app.createPostData.postTitle);
+      app.createPostData = {};
+      console.log(app.createPostData);
+  };
+
+  this.createPost = function(createPostData, valid) {
+    app.loading = true;   // when register button is clicked, set loading to true to display the loading icon
+    app.errorMsg = false; // set the error message to false so it does not show up in register.html until the message is set
+
+    console.log("Valid value: " + valid);
+    if (valid) {
+        console.log("before date");
+        // if valid, we need to get the date in mm/dd/yyyy before we have all the data
+        var dateObj = new Date();
+        var month = dateObj.getMonth() + 1; // months from 1-12 (january is 0)
+        var day = dateObj.getDate();
+        var year = dateObj.getFullYear();
+        var currentDate = month + "/" + day + "/" + year;
+
+        console.log("After date: " + currentDate);
+        //app.createPostData.date = currentDate;
+        //app.createPostData.postAuthor = app.username;
+
+        //console.log("app.createPostData.date: " + app.createPostData.date);
+        //console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
+        console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
+        //console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
+
+/*
+        //test
+        var fs = require('fs');
+        //test end
+        app.createPostData.postImg.data = fs.readFileSync(createPostData.postImg.data);
+        app.createPostData.postImg.contentType = "image/png";
+*/
+
+
+        Post.create(app.createPostData).then(function(data){
+            if (data.data.success) {
+                console.log("data was success");
+                app.loading = false;
+                app.successMsg = data.data.message; // if the current user was successful in posting
+                // redirect to home page - after a timeout run a function which redirects
+                $timeout(function(){
+                  $location.path('/');
+                  app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                }, 2000);
+            }
+            else {
+                console.log("data was failed");
+                app.loading = false;
+                // Create an error message
+                app.errorMsg = data.data.message; // sets the errorMsg to true
+
+                //test
+                $timeout(function(){
+                  app.errorMsg = false;
+                }, 5000);
+                //test
+            }
+        });
+    }
+    else {
+        app.loading = false;
+        // Create an error message
+        app.errorMsg = 'Please ensure form is filled out properly'; // sets the errorMsg to true
+
+        //test
+        $timeout(function(){
+          app.errorMsg = false;
+        }, 10000);
+        //test
+    }
   };
 
   app.renewSession = function() {         // index modal runs this function if user selects yes to renew session
@@ -96,12 +180,12 @@ angular.module('mainController', ['authServices', 'userServices'])
     app.choiceMade = true;
     hideModal();
     $timeout(function() {
-      showModal(2);     // logout user modal after 1 second
+      showLogoutModal(2);     // logout user modal after 1 second
     }, 1000);
   };
 
   var hideModal = function () {           // function to hide our modal
-    $("#myModal").modal('hide');
+    $("#logoutModal").modal('hide');
   };
 
 
@@ -181,7 +265,7 @@ angular.module('mainController', ['authServices', 'userServices'])
   };
 
   app.logout = function() {
-    showModal(2);
+    showLogoutModal(2);
   };
 
 });

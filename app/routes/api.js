@@ -2,9 +2,11 @@ var User = require('../models/user'); // 1 period means current directory, 2 per
 var Post = require('../models/post');
 var jwt = require('jsonwebtoken');
 var secret = 'edward';
+//var fs = require('fs');
 
 // exports the route to the user
 module.exports = function(router) { // need to export so that we can import into our server.js file
+
   // http://localhost:8080/api/users   . in server.js we added /api to all backend routes so they don't conflict with frontend routes using same url
   // anytime we want to create or enter data into the database, we use post
   router.post('/users', function(req, res){   // USER REGISTRATION ROUTE
@@ -93,7 +95,7 @@ module.exports = function(router) { // need to export so that we can import into
             }
             else {
               // once password is validated, give the user a jwebtoken which maps to the username and email, expires in 24hrs
-              var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '1m' });
+              var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '30m' });
               res.json({ success: true, message: 'User authenticated', token: token }); // send the token we created to the user
             }
           }
@@ -141,7 +143,7 @@ module.exports = function(router) { // need to export so that we can import into
       }
       else {
         //  give the user a jwebtoken which maps to the username and email, expires in 24hrs
-        var newToken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '1m' });
+        var newToken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '30m' });
         res.json({ success: true, token: newToken }); // send the token we created to the user
       }
     });
@@ -408,6 +410,41 @@ module.exports = function(router) { // need to export so that we can import into
           }
       });
   });
+
+  //test
+    router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
+      var post = new Post();
+      post.title = req.body.postTitle;
+      /*
+      post.description = req.body.postDescription;
+      post.postAuthor = req.body.postAuthor;
+      post.date = req.body.date;
+
+      */
+
+      /*
+      post.postImg.data = req.body.postImg.data;
+      post.postImg.contentType = req.body.postImg.contentType;
+      */
+
+      if (req.body.postTitle == null || req.body.postTitle == '') {
+        res.json({ success: false, message: 'Ensure required fields are provided'});
+      }
+      else {
+        post.save(function(err) {
+          if (err) {
+            res.json({ success: false, message: "failed"});
+          }
+          else {
+            res.json({ success: true, message: "Post has been created!"});
+          }
+
+        });
+      }
+
+    });
+    //END OF test
+
 
   return router;
 }
