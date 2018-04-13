@@ -176,10 +176,19 @@
 
     function getPostImageInfo(val) {
         console.log('javascript onchange function value: ' + val);
-        var pathValue = document.getElementById("postImg").files[0].name;
-        var descriptionValue = document.getElementById("postDescription").value;
-        console.log(descriptionValue);
-        console.log('getElementById path: ' + pathValue);
+        var imageFile = document.getElementById("postImg").files[0];
+
+        var fReader = new FileReader();
+        fReader.onloadend = function(event) {
+          var img = document.getElementById('postImgThumbnail');
+          img.src = fReader.result;
+        }
+        if (imageFile) {
+          fReader.readAsDataURL(imageFile);
+        } else {  //  clear image preview
+          var img = document.getElementById('postImgThumbnail');
+          img.src = "";
+        }
     }
 
 

@@ -69,20 +69,20 @@
 
                                   <label>File input</label>
                                   <div class="form-group">
-                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
+                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" onchange="getPostImageInfo(this.value);" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
                                     <small id="fileHelp" class="form-text text-muted">Only images with .png, .jpg, or .jpeg format will be accepted.</small>
                                   </div>
 
                                   <br>
-
+<!--
                                   <h2>Files</h2>
                                   <div ng-repeat="file in fileArray">
                                     {{file.name}}
                                   </div>
 
                                   <br>
-
-                                  <img class="postImgThumbnail" ng-src="{{ postImgThumbnail.dataUrl || 'https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image' }}">
+-->
+                                  <img class="postImgThumbnail" id="postImgThumbnail" src="" alt="Image preview...">
 
                                   <br>
                                   <br>

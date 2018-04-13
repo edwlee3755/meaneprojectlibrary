@@ -115,10 +115,8 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         var filename = fileArray[0].name;
         var postFile = fileArray[0];
         var fileReader = new FileReader();
-      //  app.createPostData.postImg.data = fileReader.readAsDataURL(postFile);
         console.log("filename: " + filename);
         var fileExtension = filename.split('.').pop();
-        console.log("getting file extension: " + fileExtension);
         //app.createPostData.postImg = postFile;
 
         fileReader.readAsDataURL(postFile);
@@ -130,23 +128,14 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         app.createPostData.postImg = fileRead;
         app.createPostData.contentType = fileType;
 
-        //app.createPostData.postImg.contentType = "image/" + fileExtension;
+        //https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image
+
 
         console.log("app.createPostData.date: " + app.createPostData.date);
         console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
         console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
         console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
         console.log("app.createPostData.postImg: " + app.createPostData.postImg);
-        //console.log("app.createPostData.postImg.contentType: " + app.createPostData.postImg.contentType);
-
-/*
-        //test
-        var fs = require('fs');
-        //test end
-        app.createPostData.postImg.data = fs.readFileSync(createPostData.postImg.data);
-        app.createPostData.postImg.contentType = "image/png";
-*/
-
 
         Post.create(app.createPostData).then(function(data){
             if (data.data.success) {
