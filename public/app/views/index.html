@@ -38,6 +38,9 @@
     <script src="app/controllers/mainCtrl.js"></script>
     <script src="app/controllers/managementCtrl.js"></script>
 
+    <!-- Angular Directives -->
+    <script src="app/directives/fileInput.js"></script>
+
     <!-- Angular Services -->
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
@@ -152,6 +155,7 @@
     <script src="assets/js/bootstrap.js"></script>
 -->
   <script type="text/javascript">
+
     $(document).ready(function() {
         // Show or hide the sticky footer button
         $(window).scroll(function() {
@@ -169,6 +173,16 @@
           $('html, body').animate({scrollTop: 0}, 300);
         })
       });
+
+    function getPostImageInfo(val) {
+        console.log('javascript onchange function value: ' + val);
+        var pathValue = document.getElementById("postImg").files[0].name;
+        var descriptionValue = document.getElementById("postDescription").value;
+        console.log(descriptionValue);
+        console.log('getElementById path: ' + pathValue);
+    }
+
+
   </script>
   </body>
 </html>

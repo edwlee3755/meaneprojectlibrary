@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 
+<html>
 
-
+<body>
     <br><br>
 
     <div class=" jumbotron text-center" ng-show="main.loading">
@@ -28,7 +30,7 @@
 
         <h1>
           News Feed
-          <button type="button" style="float: right;" ng-click="main.showCreatePostModal(); main.clearPostText(); postForm.$setPristine();" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
+          <button type="button" style="float: right;" ng-click="main.showCreatePostModal(); main.clearPostText(); postForm.$setPristine();" onclick="postForm.reset()" class="btn btn-success btn-s" ng-show="main.isLoggedIn"><span class="glyphicon glyphicon-plus"></span> Post</button>
 
         </h1>
 
@@ -37,7 +39,7 @@
             <div class="modal-dialog modal-lg">
                   <div class="modal-content" style="background-color:rgb(250,250,250)">
                       <div class="modal-header">
-                          <button type="button" class="close" ng-click="main.clearPostText(); postForm.$setPristine();" data-dismiss="modal">&times;</button>
+                          <button type="button" class="close" ng-click="main.clearPostText(); postForm.$setPristine();" onclick="postForm.reset()" data-dismiss="modal">&times;</button>
                           <h4 class="modal-title"><center>{{ main.postModalHeader }}</center></h4>
                       </div>
                       <div class="modal-body">
@@ -59,22 +61,34 @@
 
                                   <label>Text</label>
                                   <div class="form-group">
-                                    <textarea class="form-control" ng-model="main.createPostData.postDescription" name="postDescription" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 180px;" maxlength="1000"></textarea>
+                                    <textarea id="postDescription" class="form-control" ng-model="main.createPostData.postDescription" name="postDescription" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 180px;" maxlength="1000"></textarea>
                                   </div>
 
                                   <br>
 
-<!--
+
                                   <label>File input</label>
                                   <div class="form-group">
-                                    <input type="file" class="form-control-file" ng-model="main.createPostData.postImg.data" name="postImg" aria-describedby="fileHelp">
+                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
                                     <small id="fileHelp" class="form-text text-muted">Only images with .png, .jpg, or .jpeg format will be accepted.</small>
                                   </div>
--->
+
                                   <br>
 
-                                  <button type="submit" class="btn btn-primary" ng-click="main.createPost(createPostData, postForm.$valid);" data-dismiss="modal">Submit</button>
-                                  <button type="button" class="btn btn-secondary" ng-click="main.clearPostText(); postForm.$setPristine();" data-dismiss="modal">Cancel</button>
+                                  <h2>Files</h2>
+                                  <div ng-repeat="file in fileArray">
+                                    {{file.name}}
+                                  </div>
+
+                                  <br>
+
+                                  <img class="postImgThumbnail" ng-src="{{ postImgThumbnail.dataUrl || 'https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image' }}">
+
+                                  <br>
+                                  <br>
+
+                                  <button type="submit" class="btn btn-primary" ng-click="main.createPost(createPostData, postForm.$valid, fileArray);" data-dismiss="modal">Submit</button>
+                                  <button type="button" class="btn btn-secondary" ng-click="main.clearPostText(); postForm.$setPristine();" onclick="postForm.reset()" data-dismiss="modal">Cancel</button>
                               </div>      <!-- /style padding div -->
                           </form>
                       </div>            <!-- /Modal Body -->
@@ -85,3 +99,6 @@
       </div>                            <!--  Page Header -->
 
     </div>                              <!-- Style Background -->
+
+</body>
+</html>

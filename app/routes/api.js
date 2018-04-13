@@ -418,7 +418,25 @@ module.exports = function(router) { // need to export so that we can import into
       post.description = req.body.postDescription;
       post.postAuthor = req.body.postAuthor;
       post.date = req.body.date;
+      post.postImg.data = req.body.postImg;
+      post.postImg.contentType = req.body.contentType;
 
+      //test
+      //1.var fs = require('fs');
+      //test end
+      //if (req.body.postImg != undefined || req.body.postImg != null || req.body.postImg != '') {
+        //2.var imagePath = './app/routes/5.png'
+        //post.postImg.contentType = "image/png";
+
+        /*
+        fs.readFile(imagePath, function(dataErr, data){
+            if (data) {
+              post.postImg.data = data;
+            }
+        });
+        */
+        //4.post.postImg.data = fs.readFileSync(imagePath);
+    //  }
 
       /*
       post.postImg.data = req.body.postImg.data;

@@ -7,7 +7,7 @@ var PostSchema = new postSchema({
   postDescription: { type: String},
   date: { type: Date},
   postAuthor: {type: String, required: true},
-  //postImg: { data: Buffer, contentType: String},
+  postImg: { data: Buffer, contentType: String},
   upvotes: { type: Number, default: 0},
   downvotes: { type: Number, default: 0}
 });

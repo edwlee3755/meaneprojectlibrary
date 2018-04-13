@@ -1,4 +1,4 @@
-angular.module('mainController', ['authServices', 'userServices', 'postServices'])
+angular.module('mainController', ['authServices', 'userServices', 'postServices', 'fileInputDirective'])
 
 .controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http){
   var app = this;
@@ -90,7 +90,11 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
       console.log(app.createPostData);
   };
 
-  this.createPost = function(createPostData, valid) {
+  this.getPostImgValue = function(val) {
+      console.log("From main controller. PostImgValue: ");
+  };
+
+  this.createPost = function(createPostData, valid, fileArray) {
     app.loading = true;   // when register button is clicked, set loading to true to display the loading icon
     app.errorMsg = false; // set the error message to false so it does not show up in register.html until the message is set
 
@@ -108,10 +112,32 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         app.createPostData.date = currentDate;
         app.createPostData.postAuthor = app.username;
 
+        var filename = fileArray[0].name;
+        var postFile = fileArray[0];
+        var fileReader = new FileReader();
+      //  app.createPostData.postImg.data = fileReader.readAsDataURL(postFile);
+        console.log("filename: " + filename);
+        var fileExtension = filename.split('.').pop();
+        console.log("getting file extension: " + fileExtension);
+        //app.createPostData.postImg = postFile;
+
+        fileReader.readAsDataURL(postFile);
+        var fileRead = fileReader.result;
+        var fileType = "image/" + fileExtension;
+
+        console.log("fileRead: " + fileRead);
+        console.log("fileType: " + fileType);
+        app.createPostData.postImg = fileRead;
+        app.createPostData.contentType = fileType;
+
+        //app.createPostData.postImg.contentType = "image/" + fileExtension;
+
         console.log("app.createPostData.date: " + app.createPostData.date);
         console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
         console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
         console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
+        console.log("app.createPostData.postImg: " + app.createPostData.postImg);
+        //console.log("app.createPostData.postImg.contentType: " + app.createPostData.postImg.contentType);
 
 /*
         //test
