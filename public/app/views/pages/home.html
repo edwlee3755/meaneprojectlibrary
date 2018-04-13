@@ -69,11 +69,10 @@
 
                                   <label>File input</label>
                                   <div class="form-group">
-                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" onchange="getPostImageInfo(this.value);" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
+                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" onchange="showImagePreview(this.value);" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
                                     <small id="fileHelp" class="form-text text-muted">Only images with .png, .jpg, or .jpeg format will be accepted.</small>
                                   </div>
 
-                                  <br>
 <!--
                                   <h2>Files</h2>
                                   <div ng-repeat="file in fileArray">
@@ -82,7 +81,7 @@
 
                                   <br>
 -->
-                                  <img class="postImgThumbnail" id="postImgThumbnail" src="" alt="Image preview...">
+                                  <img class="postImgThumbnail" id="postImgThumbnail" src="" alt="No image selected for preview...">
 
                                   <br>
                                   <br>
