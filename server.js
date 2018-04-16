@@ -10,8 +10,8 @@ var path = require('path');
 
 // app.use order matters for which middleware will run first (ie. we need to parse the data before we can use the routes)
 app.use(morgan('dev')); // prints requests on console for viewing
-app.use(bodyParser.json()); // for parsing application/json content type
-app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json content type
+app.use(bodyParser.urlencoded({extended: true, limit: "50mb", parameterLimit: 5000000})); // for parsing application/x-www-form-urlencoded
 app.use(express.static(__dirname + '/public')); // frontend will have access to all files in public folder
 app.use('/api', appRoutes); // add '/api' to our backend routes so they don't conflict with our frontend routes if they share the same route
 

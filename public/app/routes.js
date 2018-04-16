@@ -4,7 +4,9 @@ var app = angular.module('appRoutes', ['ngRoute'])
 
   // when users type default location, provide them with an object (our home page)
 	$routeProvider.when('/', {
-			templateUrl: 'app/views/pages/home.html'
+			templateUrl: 'app/views/pages/home.html',
+			controller: 'homeCtrl',
+			controllerAs: 'home'
 	}) //note there is no ';' because we want another '.when()' for the abouts page
 
 	.when('/about', {

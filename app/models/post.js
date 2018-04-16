@@ -5,9 +5,10 @@ var validate = require('mongoose-validator');
 var PostSchema = new postSchema({
   title: { type: String, required: true},
   postDescription: { type: String},
-  date: { type: Date},
+  date: { type: String},
   postAuthor: {type: String, required: true},
-  postImg: { data: Buffer, contentType: String},
+  //postImg: { data: Buffer, contentType: String},
+  postImg: { data: String, contentType: String},
   upvotes: { type: Number, default: 0},
   downvotes: { type: Number, default: 0}
 });

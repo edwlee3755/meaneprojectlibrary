@@ -107,6 +107,17 @@ module.exports = function(router) { // need to export so that we can import into
     });
   });
 
+  router.get('/getPosts' , function (req, res) {
+    Post.find({}, function (err, posts) {
+        if (err) throw err;
+        if (!posts) {
+          res.json({ success: false, message: 'No posts found'});
+        } else {
+          res.json({ success: true, posts: posts});
+        }
+    });
+  });
+
   // IMPORTANT: define routes that require user to be logged in AFTER the middleware. Routes that do not require user login should be placed ABOVE middleware defined below
   // express middleware to decrpt the json web token and send it back to the user
   router.use(function(req, res, next){  // '.use for express middleware'. 'next' is used for middleware
@@ -415,9 +426,11 @@ module.exports = function(router) { // need to export so that we can import into
     router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
       var post = new Post();
       post.title = req.body.postTitle;
-      post.description = req.body.postDescription;
+      post.postDescription = req.body.postDescription;
       post.postAuthor = req.body.postAuthor;
       post.date = req.body.date;
+      //var bufferedBase64 = Buffer.from(req.body.postImg, 'base64'); // we need to make sure we save the buffered base 64 version of base64 encoded string from readAsDataURL since default type buffer in our schema is UTF8 (different from base64)
+      //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
       post.postImg.data = req.body.postImg;
       post.postImg.contentType = req.body.contentType;
 

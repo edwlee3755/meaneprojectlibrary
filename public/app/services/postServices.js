@@ -8,5 +8,9 @@ angular.module('postServices', [])
     return $http.post('/api/posts', createPostData);
   };
 
+  postFactory.getPosts = function () {
+    return $http.get('/api/getPosts');
+};
+
   return postFactory;
 });
