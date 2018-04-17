@@ -13,7 +13,7 @@ angular.module('homeController', [])
             console.log(app.posts);
             for ( i=0; i < app.posts.length; i++)
             {
-              console.log('postimgdata: ' + app.posts[i].postImg.data);
+              //console.log('postimgdata: ' + app.posts[i].postImg.data);
               //var notConverted64 = app.posts[i].postImg.data;
               //var converted64 = notConverted64.toString('base64');
               //app.posts[i].postImg.data = converted64;
