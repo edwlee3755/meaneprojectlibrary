@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/public')); // frontend will have access to 
 app.use('/api', appRoutes); // add '/api' to our backend routes so they don't conflict with our frontend routes if they share the same route
 
 //mongoose.connect('mongodb://localhost:27017/meaneprojectlibrary', function(err){
-mongoose.connect('mongodb://<edward.lee3755@gmail.com>:<cbcnews101>@ds247449.mlab.com:47449/heroku_1n940bvv', function(err){  // subbed in for mlab database hosting
+mongoose.connect('mongodb://<heroku_1n940bvv>:<cbcnews101>@ds247449.mlab.com:47449/heroku_1n940bvv', function(err){  // subbed in for mlab database hosting
   //if err connecting to database print error
   if (err) {
     console.log('Not connected to the database: ' + err);
