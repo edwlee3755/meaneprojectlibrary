@@ -107,24 +107,25 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         var dateObj = new Date();
         var year = dateObj.getFullYear();
         var day = dateObj.getDate();
-        if ( day = 1 || 21 || 31) { day = day + "st"; }
-        else if ( day = 2 || 22 ) { day = day + "nd"; }
-        else if ( day = 3 || 23 ) { day = day + "rd"; }
+        if ( day == 1 || day == 21 || day == 31) { day = day + "st"; }
+        else if ( day == 2 || day == 22 ) { day = day + "nd"; }
+        else if ( day == 3 || day == 23 ) { day = day + "rd"; }
         else { day = day + "th"; }
 
         var month = dateObj.getMonth() + 1; // months from 1-12 (january is 0)
-        if ( month = 1) { month = "Jan." }
-        else if ( month = 2) { month = "Feb."; }
-        else if ( month = 3) { month = "Mar."; }
-        else if ( month = 4) { month = "Apr."; }
-        else if ( month = 5) { month = "May."; }
-        else if ( month = 6) { month = "Jun."; }
-        else if ( month = 7) { month = "Jul."; }
-        else if ( month = 8) { month = "Aug."; }
-        else if ( month = 9) { month = "Sept."; }
-        else if ( month = 10) { month = "Oct."; }
-        else if ( month = 11) { month = "Nov."; }
-        else if ( month = 12) { month = "Dec."; }
+        if ( month == 1) { month = "Jan." }
+        else if ( month == 2) { month = "Feb."; }
+        else if ( month == 3) { month = "Mar."; }
+        else if ( month == 4) { month = "Apr."; }
+        else if ( month == 5) { month = "May."; }
+        else if ( month == 6) { month = "Jun."; }
+        else if ( month == 7) { month = "Jul."; }
+        else if ( month == 8) { month = "Aug."; }
+        else if ( month == 9) { month = "Sept."; }
+        else if ( month == 10) { month = "Oct."; }
+        else if ( month == 11) { month = "Nov."; }
+        else if ( month == 12) { month = "Dec."; }
+        else { month = "Err"; }
 
         var currentDate = month + " " + day + ", " + year;
 
@@ -132,65 +133,98 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         app.createPostData.date = currentDate;
         app.createPostData.postAuthor = app.username;
 
-        var filename = fileArray[0].name;
-        var postFile = fileArray.item(0);
-        var fileReader = new FileReader();
-        console.log("filename: " + postFile);
-        var fileExtension = filename.split('.').pop();
-        //app.createPostData.postImg = postFile;
+        if (fileArray && fileArray.length > 0)
+        {
+          //var pathName = __dirname;
+          //console.log('print path name on localhost: ' + pathName);
+          var filename = fileArray[0].name;
+          var postFile = fileArray.item(0);
+          var fileReader = new FileReader();
+          console.log("filename: " + postFile);
+          var fileExtension = filename.split('.').pop();
+          //app.createPostData.postImg = postFile;
 
-        var fileRead = "fail";
-        var base64EncodedString;
-        fileReader.readAsDataURL(postFile);
-        fileReader.onload = function() {
-          fileRead = fileReader.result;
-          //console.log('onload: ' + fileRead);
+          var fileRead = "fail";
+          var base64EncodedString;
+          fileReader.readAsDataURL(postFile);
+          fileReader.onload = function() {
+            fileRead = fileReader.result;
+            //console.log('onload: ' + fileRead);
 
-          var base64Split = fileRead.split(',');
-          base64String = base64Split[1];
+            var base64Split = fileRead.split(',');
+            base64String = base64Split[1];
 
-          var fileType = "image/" + fileExtension;
+            var fileType = "image/" + fileExtension;
 
-          //console.log("fileRead: " + fileRead);
-          console.log('base64String: ' + base64String);
-          console.log("fileType: " + fileType);
-          app.createPostData.postImg = base64String;
-          app.createPostData.contentType = fileType;
+            //console.log("fileRead: " + fileRead);
+            //console.log('base64String: ' + base64String);
+            console.log("fileType: " + fileType);
+            app.createPostData.postImg = fileRead;
+            app.createPostData.contentType = fileType;
 
-          //https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image
+            //https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image
 
 
-          console.log("app.createPostData.date: " + app.createPostData.date);
-          console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
-          console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
-          console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
-          //console.log("app.createPostData.postImg: " + app.createPostData.postImg);
+            console.log("app.createPostData.date: " + app.createPostData.date);
+            console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
+            console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
+            console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
+            //console.log("app.createPostData.postImg: " + app.createPostData.postImg);
 
-          Post.create(app.createPostData).then(function(data){
-              if (data.data.success) {
-                  console.log("data was success");
-                  app.loading = false;
-                  app.successMsg = data.data.message; // if the current user was successful in posting
-                  // redirect to home page - after a timeout run a function which redirects
-                  $timeout(function(){
-                    $location.path('/');
-                    app.successMsg = false; // clear out login form data successful login msg once we are logged in
-                  }, 2000);
-              }
-              else {
-                  console.log("data was failed");
-                  app.loading = false;
-                  // Create an error message
-                  app.errorMsg = data.data.message; // sets the errorMsg to true
+            Post.create(app.createPostData).then(function(data){
+                if (data.data.success) {
+                    console.log("data was success");
+                    app.loading = false;
+                    app.successMsg = data.data.message; // if the current user was successful in posting
+                    // redirect to home page - after a timeout run a function which redirects
+                    $timeout(function(){
+                      $location.path('/');
+                      app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                    }, 2000);
+                }
+                else {
+                    console.log("data was failed");
+                    app.loading = false;
+                    // Create an error message
+                    app.errorMsg = data.data.message; // sets the errorMsg to true
 
-                  //test
-                  $timeout(function(){
-                    app.errorMsg = false;
-                  }, 5000);
-                  //test
-              }
-          });
-        };
+                    //test
+                    $timeout(function(){
+                      app.errorMsg = false;
+                    }, 5000);
+                    //test
+                }
+            });
+          };
+        } else {
+          console.log('no image selected: ');
+          console.log('app.createPostData.postImg: ' + app.createPostData.postImg);
+          console.log('app.createPostData.contentType: ' + app.createPostData.contentType);
+            Post.create(app.createPostData).then(function(data){
+                if (data.data.success) {
+                    console.log("data was success");
+                    app.loading = false;
+                    app.successMsg = data.data.message; // if the current user was successful in posting
+                    // redirect to home page - after a timeout run a function which redirects
+                    $timeout(function(){
+                      $location.path('/');
+                      app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                    }, 2000);
+                }
+                else {
+                    console.log("data was failed");
+                    app.loading = false;
+                    // Create an error message
+                    app.errorMsg = data.data.message; // sets the errorMsg to true
+
+                    //test
+                    $timeout(function(){
+                      app.errorMsg = false;
+                    }, 5000);
+                    //test
+                }
+            });
+        }
     }
     else { // else statement for (if valid)
         app.loading = false;

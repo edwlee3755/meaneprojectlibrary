@@ -431,7 +431,13 @@ module.exports = function(router) { // need to export so that we can import into
       post.date = req.body.date;
       //var bufferedBase64 = Buffer.from(req.body.postImg, 'base64'); // we need to make sure we save the buffered base 64 version of base64 encoded string from readAsDataURL since default type buffer in our schema is UTF8 (different from base64)
       //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
-      post.postImg.data = req.body.postImg;
+      if(req.body.postImg == undefined && req.body.contentType == undefined) {
+        //var path = path.resolve();
+        post.postImg.data = '/app/views/uploads/images/placeholder.png';
+        post.postImg.contentType = "image/png";
+      } else {
+        post.postImg.data = req.body.postImg;
+      }
       post.postImg.contentType = req.body.contentType;
 
       //test

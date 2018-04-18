@@ -164,12 +164,12 @@
         <hr>
         </div>
 
-      <!-- END OF test bootsnipp data:image/png;base64,{{post.postImg.data}}-->
+      <!-- END OF test bootsnipp data:image/png;base64,{{post.postImg.data}}  //   onerror="this.src='https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png';"-->
       <div class="row" style="padding-left: 20px; padding-right: 20px;" ng-repeat="post in home.posts">
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3">
                 <a href="#">
-                    <img src="data:{{ post.postImg.contentType }};base64,{{post.postImg.data}}" class="img-responsive img-box img-thumbnail">
+                    <img src="{{ post.postImg.data}}" alt="placeholder image not loaded 3" class="img-responsive img-box img-thumbnail"/>
                 </a>
             </div>
             <div class="col-xs-12 col-sm-9 col-md-9">
