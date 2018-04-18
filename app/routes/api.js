@@ -437,8 +437,8 @@ module.exports = function(router) { // need to export so that we can import into
         post.postImg.contentType = "image/png";
       } else {
         post.postImg.data = req.body.postImg;
+        post.postImg.contentType = req.body.contentType;
       }
-      post.postImg.contentType = req.body.contentType;
 
       //test
       //1.var fs = require('fs');
