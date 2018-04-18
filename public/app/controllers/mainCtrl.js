@@ -107,24 +107,25 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         var dateObj = new Date();
         var year = dateObj.getFullYear();
         var day = dateObj.getDate();
-        if ( day = 1 || 21 || 31) { day = day + "st"; }
-        else if ( day = 2 || 22 ) { day = day + "nd"; }
-        else if ( day = 3 || 23 ) { day = day + "rd"; }
+        if ( day == 1 || day == 21 || day == 31) { day = day + "st"; }
+        else if ( day == 2 || day == 22 ) { day = day + "nd"; }
+        else if ( day == 3 || day == 23 ) { day = day + "rd"; }
         else { day = day + "th"; }
 
         var month = dateObj.getMonth() + 1; // months from 1-12 (january is 0)
-        if ( month = 1) { month = "Jan." }
-        else if ( month = 2) { month = "Feb."; }
-        else if ( month = 3) { month = "Mar."; }
-        else if ( month = 4) { month = "Apr."; }
-        else if ( month = 5) { month = "May."; }
-        else if ( month = 6) { month = "Jun."; }
-        else if ( month = 7) { month = "Jul."; }
-        else if ( month = 8) { month = "Aug."; }
-        else if ( month = 9) { month = "Sept."; }
-        else if ( month = 10) { month = "Oct."; }
-        else if ( month = 11) { month = "Nov."; }
-        else if ( month = 12) { month = "Dec."; }
+        if ( month == 1) { month = "Jan." }
+        else if ( month == 2) { month = "Feb."; }
+        else if ( month == 3) { month = "Mar."; }
+        else if ( month == 4) { month = "Apr."; }
+        else if ( month == 5) { month = "May."; }
+        else if ( month == 6) { month = "Jun."; }
+        else if ( month == 7) { month = "Jul."; }
+        else if ( month == 8) { month = "Aug."; }
+        else if ( month == 9) { month = "Sept."; }
+        else if ( month == 10) { month = "Oct."; }
+        else if ( month == 11) { month = "Nov."; }
+        else if ( month == 12) { month = "Dec."; }
+        else { month = "Err"; }
 
         var currentDate = month + " " + day + ", " + year;
 

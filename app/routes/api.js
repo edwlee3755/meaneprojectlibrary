@@ -433,7 +433,7 @@ module.exports = function(router) { // need to export so that we can import into
       //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
       if(req.body.postImg == undefined && req.body.contentType == undefined) {
         //var path = path.resolve();
-        post.postImg.data = 'from post route: ' + __dirname;
+        post.postImg.data = '/app/views/uploads/images/placeholder.png';
         post.postImg.contentType = "image/png";
       } else {
         post.postImg.data = req.body.postImg;

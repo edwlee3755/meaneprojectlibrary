@@ -12,11 +12,11 @@ var path = require('path');
 app.use(morgan('dev')); // prints requests on console for viewing
 app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json content type
 app.use(bodyParser.urlencoded({extended: true, limit: "50mb", parameterLimit: 5000000})); // for parsing application/x-www-form-urlencoded
-app.use(express.static(__dirname + '/public')); // frontend will have access to all files in public folder
+app.use(express.static(__dirname + '/public')); // frontend will have access to all files in public folder. // we use /public as the root directory
 app.use('/api', appRoutes); // add '/api' to our backend routes so they don't conflict with our frontend routes if they share the same route
 
-//mongoose.connect('mongodb://localhost:27017/meaneprojectlibrary', function(err){
-mongoose.connect('mongodb://edward:edward@ds247449.mlab.com:47449/heroku_1n940bvv', function(err){  // subbed in for mlab database hosting
+mongoose.connect('mongodb://localhost:27017/meaneprojectlibrary', function(err){
+//mongoose.connect('mongodb://edward:edward@ds247449.mlab.com:47449/heroku_1n940bvv', function(err){  // subbed in for mlab database hosting
   //if err connecting to database print error
   if (err) {
     console.log('Not connected to the database: ' + err);
