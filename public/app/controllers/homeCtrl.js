@@ -1,4 +1,4 @@
-angular.module('homeController', [])
+angular.module('homeController', ['fileInputDirective'])
 
 .controller('homeCtrl', function(Post, $timeout, $scope) {
     var app = this;
@@ -43,4 +43,4 @@ angular.module('homeController', [])
     }
 
     getPosts();
-})
+});
