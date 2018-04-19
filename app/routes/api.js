@@ -8,7 +8,7 @@ var secret = 'edward';
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/app/uploads');
+        cb(null, 'public/app/uploads');
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
@@ -478,7 +478,7 @@ module.exports = function(router) { // need to export so that we can import into
           res.json({ success: false, message: "failed"});
         }
         else {
-          res.json({ success: true, message: "Post has been created!"});
+          res.json({ success: true, message: "Post has been created!: " + __dirname});
         }
 
       });
