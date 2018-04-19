@@ -28,7 +28,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({
     storage: storage,
-    limits: { fileSize: 10000000 }
+    limits: { fileSize: 5000000 }
 }).single('postImg');
 
 //end test formdata image upload
@@ -492,7 +492,7 @@ module.exports = function(router) { // need to export so that we can import into
       upload(req, res, function(err) {
           if (err) {
               if (err.code === 'LIMIT_FILE_SIZE') {
-                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
+                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB: + ' __dirname });
               } else if (err.code === 'filetype') {
                   res.json({ success: false, message: 'Filetype is invalid. Must be .png, .jpeg, jpg' });
               } else {
