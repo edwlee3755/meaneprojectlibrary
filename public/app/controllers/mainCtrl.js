@@ -92,6 +92,7 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
       console.log(app.createPostData);
   };
 
+<<<<<<< HEAD
   this.getPostImgValue = function(val) {
       console.log("From main controller. PostImgValue: ");
   };
@@ -119,6 +120,8 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
   // end test with form data
 
 
+=======
+>>>>>>> c524a7199be7e38bdb4645c54107bfafd504f7d0
   this.createPost = function(createPostData, valid, ngPostImgFile) {
     app.loading = true;   // when register button is clicked, set loading to true to display the loading icon
     app.errorMsg = false; // set the error message to false so it does not show up in register.html until the message is set
@@ -165,7 +168,7 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         {
           console.log(ngPostImgFile);
           var filename = ngPostImgFile.name;
-          app.createPostData.postImgUrl = '/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
+          app.createPostData.postImgUrl = '/app/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
           var fileReader = new FileReader();
           console.log("filename: " + filename);
           var fileExtension = filename.split('.').pop();
@@ -183,14 +186,6 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
             app.createPostData.postImg = fileRead;
             app.createPostData.contentType = fileType;
 
-            console.log("app.createPostData.date: " + app.createPostData.date);
-            console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
-            console.log("app.createPostData.postTitle: " + app.createPostData.postTitle);
-            console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
-            //console.log("app.createPostData.postImg: " + app.createPostData.postImg);
-
-            //test with file upload FormData
-            //console.log('parsed file: ' + parsedFileSet);
             postImgUpload.upload(ngPostImgFile).then(function(data) {
               if (data.data.success) {  // if image uploaded to local directory
                 console.log('Date main ctrl: ' + Date.now());
@@ -232,39 +227,9 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
               }
             });
 
-            //end test file upload with formdata
-
-/*
-            Post.create(app.createPostData).then(function(data){
-                if (data.data.success) {
-                    console.log("data was success");
-                    app.loading = false;
-                    app.successMsg = data.data.message; // if the current user was successful in posting
-                    // redirect to home page - after a timeout run a function which redirects
-                    $timeout(function(){
-                      $location.path('/');
-                      app.successMsg = false; // clear out login form data successful login msg once we are logged in
-                    }, 2000);
-                }
-                else {
-                    console.log("data was failed");
-                    app.loading = false;
-                    // Create an error message
-                    app.errorMsg = data.data.message; // sets the errorMsg to true
-
-                    //test
-                    $timeout(function(){
-                      app.errorMsg = false;
-                    }, 5000);
-                    //test
-                }
-            });
-*/
           };    // end of file reader onload
         } else {  // else statement for if filearray has no files selected so filelist has no elements
-          console.log('no image selected: ');
-          console.log('app.createPostData.postImg: ' + app.createPostData.postImg);
-          console.log('app.createPostData.contentType: ' + app.createPostData.contentType);
+            console.log('no image selected: ');
             Post.create(app.createPostData).then(function(data){
                 if (data.data.success) {
                     console.log("data was success");
