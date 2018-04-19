@@ -1,6 +1,6 @@
 angular.module('mainController', ['authServices', 'userServices', 'postServices', 'fileInputDirective'])
 
-.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http){
+.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http, postImgUpload, $parse){
   var app = this;
 
   app.loadme = false; // hide main html page until data is obtained in angularjs
@@ -96,74 +96,92 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
       console.log("From main controller. PostImgValue: ");
   };
 
-  this.createPost = function(createPostData, valid, fileArray) {
+  //test with form dataErr
+  /*
+  this.createPost = function () {
+    app.loading = true;
+    app.errorMsg = false;
+    app.successMsg = false;
+    postImgUpload.upload($scope.file).then(function(data) {
+      if (data.data.success) {
+
+          app.loading = false;
+          app.successMsg = data.data.message;
+          $scope.file = {};
+      } else {
+        app.loading = false;
+        app.errorMsg = data.data.message;
+          $scope.file = {};
+      }
+    });
+  };
+  */
+  // end test with form data
+
+
+  this.createPost = function(createPostData, valid, ngPostImgFile) {
     app.loading = true;   // when register button is clicked, set loading to true to display the loading icon
     app.errorMsg = false; // set the error message to false so it does not show up in register.html until the message is set
 
     console.log("Valid value: " + valid);
     if (valid) {
+        console.log('ngpost file: ' + ngPostImgFile);
         console.log("before date");
         // if valid, we need to get the date in mm/dd/yyyy before we have all the data
         var dateObj = new Date();
         var year = dateObj.getFullYear();
         var day = dateObj.getDate();
-        if ( day == 1 || day == 21 || day == 31) { day = day + "st"; }
-        else if ( day == 2 || day == 22 ) { day = day + "nd"; }
-        else if ( day == 3 || day == 23 ) { day = day + "rd"; }
-        else { day = day + "th"; }
+        var formattedDay;
+        var formattedMonth;
+        if ( day == 1 || day == 21 || day == 31) { formattedDay = day + "st"; }
+        else if ( day == 2 || day == 22 ) { formattedDay = day + "nd"; }
+        else if ( day == 3 || day == 23 ) { formattedDay = day + "rd"; }
+        else { formattedDay = day + "th"; }
 
         var month = dateObj.getMonth() + 1; // months from 1-12 (january is 0)
-        if ( month == 1) { month = "Jan." }
-        else if ( month == 2) { month = "Feb."; }
-        else if ( month == 3) { month = "Mar."; }
-        else if ( month == 4) { month = "Apr."; }
-        else if ( month == 5) { month = "May."; }
-        else if ( month == 6) { month = "Jun."; }
-        else if ( month == 7) { month = "Jul."; }
-        else if ( month == 8) { month = "Aug."; }
-        else if ( month == 9) { month = "Sept."; }
-        else if ( month == 10) { month = "Oct."; }
-        else if ( month == 11) { month = "Nov."; }
-        else if ( month == 12) { month = "Dec."; }
-        else { month = "Err"; }
+        if ( month == 1) { formattedMonth = "Jan." }
+        else if ( month == 2) { formattedMonth = "Feb."; }
+        else if ( month == 3) { formattedMonth = "Mar."; }
+        else if ( month == 4) { formattedMonth = "Apr."; }
+        else if ( month == 5) { formattedMonth = "May."; }
+        else if ( month == 6) { formattedMonth = "Jun."; }
+        else if ( month == 7) { formattedMonth = "Jul."; }
+        else if ( month == 8) { formattedMonth = "Aug."; }
+        else if ( month == 9) { formattedMonth = "Sept."; }
+        else if ( month == 10) { formattedMonth = "Oct."; }
+        else if ( month == 11) { formattedMonth = "Nov."; }
+        else if ( month == 12) { formattedMonth = "Dec."; }
+        else { formattedMonth = "Err"; }
 
-        var currentDate = month + " " + day + ", " + year;
+        var currentDate = formattedMonth + " " + formattedDay + ", " + year;
 
-        console.log("After date: " + currentDate);
         app.createPostData.date = currentDate;
         app.createPostData.postAuthor = app.username;
 
-        if (fileArray && fileArray.length > 0)
+        var localHours = dateObj.getHours();
+        var localMinutes = dateObj.getMinutes();
+
+        if (ngPostImgFile != undefined)
         {
-          //var pathName = __dirname;
-          //console.log('print path name on localhost: ' + pathName);
-          var filename = fileArray[0].name;
-          var postFile = fileArray.item(0);
+          console.log(ngPostImgFile);
+          var filename = ngPostImgFile.name;
+          app.createPostData.postImgUrl = '/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
           var fileReader = new FileReader();
-          console.log("filename: " + postFile);
+          console.log("filename: " + filename);
           var fileExtension = filename.split('.').pop();
-          //app.createPostData.postImg = postFile;
 
           var fileRead = "fail";
           var base64EncodedString;
-          fileReader.readAsDataURL(postFile);
+          fileReader.readAsDataURL(ngPostImgFile);
           fileReader.onload = function() {
             fileRead = fileReader.result;
-            //console.log('onload: ' + fileRead);
-
             var base64Split = fileRead.split(',');
             base64String = base64Split[1];
-
             var fileType = "image/" + fileExtension;
-
-            //console.log("fileRead: " + fileRead);
-            //console.log('base64String: ' + base64String);
             console.log("fileType: " + fileType);
+
             app.createPostData.postImg = fileRead;
             app.createPostData.contentType = fileType;
-
-            //https://www.mountaineers.org/images/placeholder-images/placeholder-400-x-400/image
-
 
             console.log("app.createPostData.date: " + app.createPostData.date);
             console.log("app.createPostData.postAuthor: " + app.createPostData.postAuthor);
@@ -171,6 +189,52 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
             console.log("app.createPostData.postDescription: " + app.createPostData.postDescription);
             //console.log("app.createPostData.postImg: " + app.createPostData.postImg);
 
+            //test with file upload FormData
+            //console.log('parsed file: ' + parsedFileSet);
+            postImgUpload.upload(ngPostImgFile).then(function(data) {
+              if (data.data.success) {  // if image uploaded to local directory
+                console.log('Date main ctrl: ' + Date.now());
+                  Post.create(app.createPostData).then(function(data){    //save post data
+                      if (data.data.success) {
+                          console.log("data was success");
+                          app.loading = false;
+                          app.successMsg = data.data.message; // if the current user was successful in posting
+                          // redirect to home page - after a timeout run a function which redirects
+                          $timeout(function(){
+                            $location.path('/');
+                            app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                          }, 2000);
+                      }
+                      else {
+                          console.log("post data was failed");
+                          app.loading = false;
+                          // Create an error message
+                          app.errorMsg = data.data.message; // sets the errorMsg to true
+
+                          //test
+                          $timeout(function(){
+                            app.errorMsg = false;
+                          }, 5000);
+                          //test
+                      }
+                  });
+              } else {  // else if image upload to local directory failed
+                    console.log("image data was failed");
+                    app.loading = false;
+                    // Create an error message
+                    app.errorMsg = data.data.message; // sets the errorMsg to true
+
+                    //test
+                    $timeout(function(){
+                      app.errorMsg = false;
+                    }, 5000);
+                    //test
+              }
+            });
+
+            //end test file upload with formdata
+
+/*
             Post.create(app.createPostData).then(function(data){
                 if (data.data.success) {
                     console.log("data was success");
@@ -195,8 +259,9 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
                     //test
                 }
             });
-          };
-        } else {
+*/
+          };    // end of file reader onload
+        } else {  // else statement for if filearray has no files selected so filelist has no elements
           console.log('no image selected: ');
           console.log('app.createPostData.postImg: ' + app.createPostData.postImg);
           console.log('app.createPostData.contentType: ' + app.createPostData.contentType);

@@ -69,7 +69,7 @@
 
                                   <label>File input</label>
                                   <div class="form-group">
-                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="fileArray" name="postImg" onchange="showImagePreview();" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp" multiple>
+                                    <input type="file" class="form-control-file" id="postImg" file-input ng-model="ngPostImg" name="PostImg" onchange="showImagePreview();" accept=".jpg, .jpeg, .png" aria-describedby="fileHelp">
                                     <small id="fileHelp" class="form-text text-muted">Only images with .png, .jpg, or .jpeg format will be accepted.</small>
                                   </div>
 
@@ -86,7 +86,7 @@
                                   <br>
                                   <br>
 
-                                  <button type="submit" class="btn btn-primary" ng-click="main.createPost(createPostData, postForm.$valid, fileArray);" data-dismiss="modal">Submit</button>
+                                  <button type="submit" class="btn btn-primary" ng-click="main.createPost(createPostData, postForm.$valid, ngPostImg);" data-dismiss="modal">Submit</button>
                                   <button type="button" class="btn btn-secondary" ng-click="main.clearPostText(); postForm.$setPristine();" onclick="postForm.reset(); showImagePreview();" data-dismiss="modal">Cancel</button>
                               </div>      <!-- /style padding div -->
                           </form>
@@ -169,7 +169,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3">
                 <a href="#">
-                    <img src="{{ post.postImg.data}}" alt="placeholder image not loaded 3" class="img-responsive img-box img-thumbnail"/>
+                    <img src="{{ post.postImgUrl}}" alt="placeholder image not loaded 3" class="img-responsive img-box img-thumbnail"/>
                 </a>
             </div>
             <div class="col-xs-12 col-sm-9 col-md-9">

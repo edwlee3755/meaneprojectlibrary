@@ -4,6 +4,36 @@ var jwt = require('jsonwebtoken');
 var secret = 'edward';
 //var fs = require('fs');
 
+//test with formdata image uploads
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/uploads');
+    },
+    filename: function(req, file, cb) {
+        if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+            var err = new Error();
+            err.code = 'filetype';
+            return cb(err);
+        } else {
+            var dateObject = new Date();
+            var month = dateObject.getMonth() + 1;
+            var day = dateObject.getDate();
+            var localHour = dateObject.getHours();
+            var localMinutes = dateObject.getMinutes();
+            cb(null, month + '_' + day + '_' + localHour + '_' + localMinutes + '_' + file.originalname);
+        }
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    limits: { fileSize: 10000000 }
+}).single('postImg');
+
+//end test formdata image upload
+
+
 // exports the route to the user
 module.exports = function(router) { // need to export so that we can import into our server.js file
 
@@ -423,62 +453,86 @@ module.exports = function(router) { // need to export so that we can import into
   });
 
   //test
-    router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
-      var post = new Post();
-      post.title = req.body.postTitle;
-      post.postDescription = req.body.postDescription;
-      post.postAuthor = req.body.postAuthor;
-      post.date = req.body.date;
-      //var bufferedBase64 = Buffer.from(req.body.postImg, 'base64'); // we need to make sure we save the buffered base 64 version of base64 encoded string from readAsDataURL since default type buffer in our schema is UTF8 (different from base64)
-      //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
-      if(req.body.postImg == undefined && req.body.contentType == undefined) {
-        //var path = path.resolve();
-        post.postImg.data = '/app/views/uploads/images/placeholder.png';
-        post.postImg.contentType = "image/png";
-      } else {
-        post.postImg.data = req.body.postImg;
-      }
+  router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
+    var post = new Post();
+    post.title = req.body.postTitle;
+    post.postDescription = req.body.postDescription;
+    post.postAuthor = req.body.postAuthor;
+    post.date = req.body.date;
+    //var bufferedBase64 = Buffer.from(req.body.postImg, 'base64'); // we need to make sure we save the buffered base 64 version of base64 encoded string from readAsDataURL since default type buffer in our schema is UTF8 (different from base64)
+    //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
+    if(req.body.postImg == undefined && req.body.contentType == undefined) {
+      //var path = path.resolve();
+      post.postImg.data = '/app/views/uploads/images/placeholder.png';
+      post.postImg.contentType = "image/png";
+      post.postImgUrl = '/app/views/uploads/images/placeholder.png'
+    } else {
+      post.postImg.data = req.body.postImg;
       post.postImg.contentType = req.body.contentType;
+      post.postImgUrl = req.body.postImgUrl;
+    }
 
-      //test
-      //1.var fs = require('fs');
-      //test end
-      //if (req.body.postImg != undefined || req.body.postImg != null || req.body.postImg != '') {
-        //2.var imagePath = './app/routes/5.png'
-        //post.postImg.contentType = "image/png";
-
-        /*
-        fs.readFile(imagePath, function(dataErr, data){
-            if (data) {
-              post.postImg.data = data;
-            }
-        });
-        */
-        //4.post.postImg.data = fs.readFileSync(imagePath);
-    //  }
+    //test
+    //1.var fs = require('fs');
+    //test end
+    //if (req.body.postImg != undefined || req.body.postImg != null || req.body.postImg != '') {
+      //2.var imagePath = './app/routes/5.png'
+      //post.postImg.contentType = "image/png";
 
       /*
-      post.postImg.data = req.body.postImg.data;
-      post.postImg.contentType = req.body.postImg.contentType;
+      fs.readFile(imagePath, function(dataErr, data){
+          if (data) {
+            post.postImg.data = data;
+          }
+      });
       */
+      //4.post.postImg.data = fs.readFileSync(imagePath);
+  //  }
 
-      if (req.body.postTitle == null || req.body.postTitle == '') {
-        res.json({ success: false, message: 'Ensure required fields are provided'});
-      }
-      else {
-        post.save(function(err) {
+    /*
+    post.postImg.data = req.body.postImg.data;
+    post.postImg.contentType = req.body.postImg.contentType;
+    */
+
+    if (req.body.postTitle == null || req.body.postTitle == '') {
+      res.json({ success: false, message: 'Ensure required fields are provided'});
+    }
+    else {
+      post.save(function(err) {
+        if (err) {
+          res.json({ success: false, message: "failed"});
+        }
+        else {
+          res.json({ success: true, message: "Post has been created!"});
+        }
+
+      });
+    }
+
+  });
+  //END OF test
+
+  // multer test post route image upload
+  router.post('/upload', function(req, res) {
+      upload(req, res, function(err) {
           if (err) {
-            res.json({ success: false, message: "failed"});
+              if (err.code === 'LIMIT_FILE_SIZE') {
+                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
+              } else if (err.code === 'filetype') {
+                  res.json({ success: false, message: 'Filetype is invalid. Must be .png, .jpeg, jpg' });
+              } else {
+                  res.json({ success: false, message: 'Unable to upload file' });
+              }
+          } else {
+              if (!req.file) {
+                  res.json({ success: false, message: 'No file was selected' });
+              } else {
+                  res.json({ success: true, message: 'File uploaded!' });
+              }
           }
-          else {
-            res.json({ success: true, message: "Post has been created!"});
-          }
-
-        });
-      }
-
-    });
-    //END OF test
+      });
+  });
+  // end multer test image upload
 
 
   return router;
