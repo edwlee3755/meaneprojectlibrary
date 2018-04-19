@@ -8,7 +8,7 @@ var secret = 'edward';
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/app/uploads');
+        cb(null, '/app/uploads');
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
