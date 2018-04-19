@@ -138,7 +138,9 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
         {
           console.log(ngPostImgFile);
           var filename = ngPostImgFile.name;
-          app.createPostData.postImgUrl = '/app/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
+          // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
+          // Heroku puts contents inside meaneprojectlibrary into a folder it creates called app. So now we need /root(meaneprojectlibrary)/app/public/uploads
+          app.createPostData.postImgUrl = '/app/public/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
           var fileReader = new FileReader();
           console.log("filename: " + filename);
           var fileExtension = filename.split('.').pop();
