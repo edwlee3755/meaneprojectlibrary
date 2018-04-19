@@ -478,7 +478,7 @@ module.exports = function(router) { // need to export so that we can import into
           res.json({ success: false, message: "failed"});
         }
         else {
-          res.json({ success: true, message: "Post has been created!"});
+          res.json({ success: true, message: "Post has been created!: " + __dirname});
         }
 
       });
