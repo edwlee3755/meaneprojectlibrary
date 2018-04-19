@@ -8,7 +8,7 @@ var secret = 'edward';
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/uploads');
+        cb(null, './public/app/uploads');
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
@@ -459,10 +459,7 @@ module.exports = function(router) { // need to export so that we can import into
     post.postDescription = req.body.postDescription;
     post.postAuthor = req.body.postAuthor;
     post.date = req.body.date;
-    //var bufferedBase64 = Buffer.from(req.body.postImg, 'base64'); // we need to make sure we save the buffered base 64 version of base64 encoded string from readAsDataURL since default type buffer in our schema is UTF8 (different from base64)
-    //post.postImg.data = bufferedBase64;       // we convert buffer here because Buffer is node.js
     if(req.body.postImg == undefined && req.body.contentType == undefined) {
-      //var path = path.resolve();
       post.postImg.data = '/app/views/uploads/images/placeholder.png';
       post.postImg.contentType = "image/png";
       post.postImgUrl = '/app/views/uploads/images/placeholder.png'
@@ -471,28 +468,6 @@ module.exports = function(router) { // need to export so that we can import into
       post.postImg.contentType = req.body.contentType;
       post.postImgUrl = req.body.postImgUrl;
     }
-
-    //test
-    //1.var fs = require('fs');
-    //test end
-    //if (req.body.postImg != undefined || req.body.postImg != null || req.body.postImg != '') {
-      //2.var imagePath = './app/routes/5.png'
-      //post.postImg.contentType = "image/png";
-
-      /*
-      fs.readFile(imagePath, function(dataErr, data){
-          if (data) {
-            post.postImg.data = data;
-          }
-      });
-      */
-      //4.post.postImg.data = fs.readFileSync(imagePath);
-  //  }
-
-    /*
-    post.postImg.data = req.body.postImg.data;
-    post.postImg.contentType = req.body.postImg.contentType;
-    */
 
     if (req.body.postTitle == null || req.body.postTitle == '') {
       res.json({ success: false, message: 'Ensure required fields are provided'});

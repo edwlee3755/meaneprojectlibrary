@@ -6,7 +6,6 @@ angular.module("fileInputDirective", [])
       link: function postLink(scope,elem,attrs,ngModel) {
         elem.on("change", function(e) {
           var file = elem[0].files[0];
-          //var parsedFile = $parse(file);
           ngModel.$setViewValue(file);
         })
       }
