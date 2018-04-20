@@ -139,6 +139,7 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
           console.log(ngPostImgFile);
           var filename = ngPostImgFile.name;
           app.createPostData.postImgUrl = '/app/uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename;
+          //app.createPostData.postImgUrl = '../../uploads/' + month + '_' + day + '_' + localHours + '_' + localMinutes + '_' + filename; // in respect to home.html since that is where the source is coming from
           var fileReader = new FileReader();
           console.log("filename: " + filename);
           var fileExtension = filename.split('.').pop();
