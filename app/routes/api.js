@@ -8,7 +8,7 @@ var secret = 'edward';
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, '/app/public/uploads');  // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
+        cb(null, '/app/public/app/uploads');  // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
