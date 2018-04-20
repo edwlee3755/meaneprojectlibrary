@@ -8,7 +8,7 @@ var secret = 'edward';
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'public/app/uploads');  // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
+        cb(null, './public/app/uploads/');  // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
@@ -28,7 +28,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({
     storage: storage,
-    limits: { fileSize: 5000000 }
+    limits: { fileSize: 10000000 }
 }).single('postImg');
 
 //end test formdata image upload
