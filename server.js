@@ -8,6 +8,8 @@ var router = express.Router();
 var appRoutes = require('./app/routes/api')(router); // (router) use the router object with this route file (our backend routes)
 var path = require('path');
 
+//server.js is the current working directory (in meaneprojectlibrary)
+
 // app.use order matters for which middleware will run first (ie. we need to parse the data before we can use the routes)
 app.use(morgan('dev')); // prints requests on console for viewing
 app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json content type
