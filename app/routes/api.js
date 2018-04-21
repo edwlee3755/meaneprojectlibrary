@@ -2,7 +2,13 @@ var User = require('../models/user'); // 1 period means current directory, 2 per
 var Post = require('../models/post');
 var jwt = require('jsonwebtoken');
 var secret = 'edward';
-//var fs = require('fs');
+
+var cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: 'meaneprojectlibrary',
+    api_key: '182348172968189',
+    api_secret: '34OvWnPzauLf6Fj4vgNivmdLZw8'
+});
 
 //test with formdata image uploads
 var multer = require('multer');
@@ -469,6 +475,10 @@ module.exports = function(router) { // need to export so that we can import into
       post.postImg.data = req.body.postImg;
       post.postImg.contentType = req.body.contentType;
       post.postImgUrl = req.body.postImgUrl;
+
+      cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
+        post.postImgUrl = result.url;
+      });
     }
 
     if (req.body.postTitle == null || req.body.postTitle == '') {
@@ -480,7 +490,7 @@ module.exports = function(router) { // need to export so that we can import into
           res.json({ success: false, message: "failed"});
         }
         else {
-          res.json({ success: true, message: "Post has been created!: " + __dirname});
+          res.json({ success: true, message: "Post has been created!"});
         }
 
       });
@@ -494,7 +504,7 @@ module.exports = function(router) { // need to export so that we can import into
       upload(req, res, function(err) {
           if (err) {
               if (err.code === 'LIMIT_FILE_SIZE') {
-                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB: ' +  __dirname });
+                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB'});
               } else if (err.code === 'filetype') {
                   res.json({ success: false, message: 'Filetype is invalid. Must be .png, .jpeg, jpg' });
               } else {
