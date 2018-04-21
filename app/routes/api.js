@@ -477,7 +477,8 @@ module.exports = function(router) { // need to export so that we can import into
       post.postImgUrl = req.body.postImgUrl;
 
       cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
-        post.postImgUrl = result.url;
+        var resultUrl = result['url'];
+        post.postImgUrl = resultUrl;
       });
     }
 
