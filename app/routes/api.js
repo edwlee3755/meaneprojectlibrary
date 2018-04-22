@@ -462,22 +462,26 @@ module.exports = function(router) { // need to export so that we can import into
 
   //test
   router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
-    var post = new Post();
-    post.title = req.body.postTitle;
-    post.postDescription = req.body.postDescription;
-    post.postAuthor = req.body.postAuthor;
-    post.date = req.body.date;
     if(req.body.postImg == undefined && req.body.contentType == undefined) {
+      var post = new Post();
+      post.title = req.body.postTitle;
+      post.postDescription = req.body.postDescription;
+      post.postAuthor = req.body.postAuthor;
+      post.date = req.body.date;
+      //
       post.postImg.data = '/app/views/uploads/images/placeholder.png';
       post.postImg.contentType = "image/png";
       post.postImgUrl = '/app/views/uploads/images/placeholder.png'
     } else {
-      post.postImg.data = req.body.postImg;
-      post.postImg.contentType = req.body.contentType;
-      //post.postImgUrl = req.body.postImgUrl;
-
       cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
-        var resultUrl = result['url'];
+        var resultUrl = result['url'];  //postImgUrl not saving atm
+        var post = new Post();
+        post.title = req.body.postTitle;
+        post.postDescription = req.body.postDescription;
+        post.postAuthor = req.body.postAuthor;
+        post.date = req.body.date;
+        post.postImg.data = req.body.postImg;
+        post.postImg.contentType = req.body.contentType;
         post.postImgUrl = resultUrl;
       });
     }
