@@ -472,6 +472,15 @@ module.exports = function(router) { // need to export so that we can import into
       post.postImg.data = '/app/views/uploads/images/placeholder.png';
       post.postImg.contentType = "image/png";
       post.postImgUrl = '/app/views/uploads/images/placeholder.png'
+      post.save(function(err) {
+        if (err) {
+          res.json({ success: false, message: "failed"});
+        }
+        else {
+          res.json({ success: true, message: "Post has been created!"});
+        }
+
+      }); // post.save
     } else {
       cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
         var resultUrl = result['url'];  //postImgUrl not saving atm
@@ -483,9 +492,18 @@ module.exports = function(router) { // need to export so that we can import into
         post.postImg.data = req.body.postImg;
         post.postImg.contentType = req.body.contentType;
         post.postImgUrl = resultUrl;
-      });
-    }
+        post.save(function(err) {
+          if (err) {
+            res.json({ success: false, message: "failed"});
+          }
+          else {
+            res.json({ success: true, message: "Post has been created!"});
+          }
 
+        }); // post.save
+      }); //cloudinary upload
+    } // else
+/*
     if (req.body.postTitle == null || req.body.postTitle == '') {
       res.json({ success: false, message: 'Ensure required fields are provided'});
     }
@@ -500,8 +518,8 @@ module.exports = function(router) { // need to export so that we can import into
 
       });
     }
-
-  });
+*/
+  }); // router.post
   //END OF test
 
   // multer test post route image upload
