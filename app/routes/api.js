@@ -9,7 +9,7 @@ cloudinary.config({
     api_key: '182348172968189',
     api_secret: '34OvWnPzauLf6Fj4vgNivmdLZw8'
 });
-
+/*
 //test with formdata image uploads
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -40,7 +40,7 @@ var upload = multer({
 }).single('postImg');
 
 //end test formdata image upload
-
+*/
 
 // exports the route to the user
 module.exports = function(router) { // need to export so that we can import into our server.js file

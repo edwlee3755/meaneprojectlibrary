@@ -1,6 +1,6 @@
 angular.module('mainController', ['authServices', 'userServices', 'postServices', 'fileInputDirective'])
 
-.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http, postImgUpload, $parse){
+.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope, Post, $http, $parse){ //removed postImgUpload since we no longer use multer
   var app = this;
 
   app.loadme = false; // hide main html page until data is obtained in angularjs
@@ -228,9 +228,9 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
                     //test
                 }
             });
-        }
-    }
-    else { // else statement for (if valid)
+        } // end of else if no image provided
+    } // end of if valid
+    else { // else statement for if not valid
         app.loading = false;
         // Create an error message
         app.errorMsg = 'Please ensure form is filled out properly'; // sets the errorMsg to true
