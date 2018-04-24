@@ -462,7 +462,7 @@ module.exports = function(router) { // need to export so that we can import into
 
   //test
   router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
-    if(req.body.postImg == undefined && req.body.contentType == undefined) {
+    if(req.body.postImg == undefined && req.body.contentType == undefined) {  // if no image provided, use placeholder
       var post = new Post();
       post.title = req.body.postTitle;
       post.postDescription = req.body.postDescription;
@@ -481,28 +481,36 @@ module.exports = function(router) { // need to export so that we can import into
         }
 
       }); // post.save
-    } else {
-      cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
-        var resultUrl = result['url'];  //postImgUrl not saving atm
-        var post = new Post();
-        post.title = req.body.postTitle;
-        post.postDescription = req.body.postDescription;
-        post.postAuthor = req.body.postAuthor;
-        post.date = req.body.date;
-        post.postImg.data = req.body.postImg;
-        post.postImg.contentType = req.body.contentType;
-        post.postImgUrl = resultUrl;
-        post.save(function(err) {
-          if (err) {
-            res.json({ success: false, message: "failed"});
-          }
-          else {
-            res.json({ success: true, message: "Post has been created!"});
-          }
+    } else {  // else if image provided
+      // check file size and file type
+      if (req.body.postImg.size > 10 * 1024 * 1024) { // converting bytes to kb to mb
+          res.json({ success: false, message: "File size is too large. Max limit is 10MB" });
+      } else if (req.body.contentType != "image/png" || req.body.contentType != "image/jpeg" || req.body.contentType != "image/jpg") {
+          res.json({ success: false, message: "Filetype is invalid. Must be .png, .jpeg, jpg" });
+      }
+      else { // else if image size and contentType is valid
+        cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
+          var resultUrl = result['url'];  //postImgUrl not saving atm
+          var post = new Post();
+          post.title = req.body.postTitle;
+          post.postDescription = req.body.postDescription;
+          post.postAuthor = req.body.postAuthor;
+          post.date = req.body.date;
+          post.postImg.data = req.body.postImg;
+          post.postImg.contentType = req.body.contentType;
+          post.postImgUrl = resultUrl;
+          post.save(function(err) {
+            if (err) {
+              res.json({ success: false, message: "failed to save"});
+            }
+            else {
+              res.json({ success: true, message: "Post has been created!"});
+            }
 
-        }); // post.save
-      }); //cloudinary upload
-    } // else
+          }); // post.save
+        }); //cloudinary upload
+      }
+    } // end of else for if image provided
 /*
     if (req.body.postTitle == null || req.body.postTitle == '') {
       res.json({ success: false, message: 'Ensure required fields are provided'});
@@ -522,6 +530,7 @@ module.exports = function(router) { // need to export so that we can import into
   }); // router.post
   //END OF test
 
+/*
   // multer test post route image upload
   router.post('/upload', function(req, res) {
       upload(req, res, function(err) {
@@ -543,7 +552,7 @@ module.exports = function(router) { // need to export so that we can import into
       });
   });
   // end multer test image upload
-
+*/
 
   return router;
 }

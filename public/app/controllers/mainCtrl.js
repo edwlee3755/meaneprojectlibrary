@@ -158,33 +158,34 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
             app.createPostData.postImg = fileRead;
             app.createPostData.contentType = fileType;
 
-            postImgUpload.upload(ngPostImgFile).then(function(data) {
-              if (data.data.success) {  // if image uploaded to local directory
-                console.log('Date main ctrl: ' + Date.now());
-                  Post.create(app.createPostData).then(function(data){    //save post data
-                      if (data.data.success) {
-                          console.log("data was success");
-                          app.loading = false;
-                          app.successMsg = data.data.message; // if the current user was successful in posting
-                          // redirect to home page - after a timeout run a function which redirects
-                          $timeout(function(){
-                            $location.path('/');
-                            app.successMsg = false; // clear out login form data successful login msg once we are logged in
-                          }, 2000);
-                      }
-                      else {
-                          console.log("post data was failed");
-                          app.loading = false;
-                          // Create an error message
-                          app.errorMsg = data.data.message; // sets the errorMsg to true
+//            postImgUpload.upload(ngPostImgFile).then(function(data) {
+//              if (data.data.success) {  // if image uploaded to local directory
+//                console.log('Date main ctrl: ' + Date.now());
+            Post.create(app.createPostData).then(function(data){    //save post data
+                if (data.data.success) {
+                    console.log("data was success");
+                    app.loading = false;
+                    app.successMsg = data.data.message; // if the current user was successful in posting
+                    // redirect to home page - after a timeout run a function which redirects
+                    $timeout(function(){
+                      $location.path('/');
+                      app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                    }, 2000);
+                }
+                else {
+                    console.log("post data was failed");
+                    app.loading = false;
+                    // Create an error message
+                    app.errorMsg = data.data.message; // sets the errorMsg to true
 
-                          //test
-                          $timeout(function(){
-                            app.errorMsg = false;
-                          }, 5000);
-                          //test
-                      }
-                  });
+                    //test
+                    $timeout(function(){
+                      app.errorMsg = false;
+                    }, 5000);
+                    //test
+                }
+            }); // post.create function
+                  /*
               } else {  // else if image upload to local directory failed
                     console.log("image data was failed");
                     app.loading = false;
@@ -196,8 +197,9 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
                       app.errorMsg = false;
                     }, 5000);
                     //test
-              }
-            });
+              } // multer upload if/else
+            }); //post img upload service .upload
+            */
 
           };    // end of file reader onload
         } else {  // else statement for if filearray has no files selected so filelist has no elements
