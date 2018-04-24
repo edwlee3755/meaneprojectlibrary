@@ -485,7 +485,7 @@ module.exports = function(router) { // need to export so that we can import into
       // check file size and file type
       if (req.body.postImg.size > 10 * 1024 * 1024) { // converting bytes to kb to mb
           res.json({ success: false, message: "File size is too large. Max limit is 10MB" });
-      } else if (req.body.contentType != "image/jpeg") {
+      } else if (req.body.contentType != "image/jpeg" || req.body.contentType != "image/jpg" || req.body.contentType != "image/png") {
           res.json({ success: false, message: "Filetype is invalid. Must be .png, .jpeg, jpg" });
       }
       else { // else if image size and contentType is valid
