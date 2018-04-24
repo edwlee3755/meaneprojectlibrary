@@ -154,9 +154,10 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
             base64String = base64Split[1];
             var fileType = "image/" + fileExtension;
             console.log("fileType: " + fileType);
+            console.log('file.type: ' + ngPostImgFile.type);
 
             app.createPostData.postImg = fileRead;
-            app.createPostData.contentType = fileType;
+            app.createPostData.contentType = ngPostImgFile.type;
 
 //            postImgUpload.upload(ngPostImgFile).then(function(data) {
 //              if (data.data.success) {  // if image uploaded to local directory
