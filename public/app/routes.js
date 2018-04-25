@@ -59,6 +59,12 @@ var app = angular.module('appRoutes', ['ngRoute'])
 			permission: ['admin', 'moderator']
 	})
 
+	.when('viewPost/:id', {
+			templateUrl: 'app/views/pages/viewPost.html',
+			controller: 'homeCtrl',
+			controllerAs: 'home',
+	})
+
 	.otherwise({ redirectTo: '/'} ); // if users type in anything else, redirect to home
 
   // this is to get rid of angular's default '#' in the url (ie localhost/#/home)
@@ -69,7 +75,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
 });
 
 // restrict routes
-app.run(['$rootScope', 'Auth', '$location', 'User', 'Post', 'postImgUpload', function($rootScope, Auth, $location, User, Post, postImgUpload){
+app.run(['$rootScope', 'Auth', '$location', 'User', 'Post', function($rootScope, Auth, $location, User, Post){ //removed postImgUpload in app.run as well as callback function since we no longer use multer
 		$rootScope.$on('$routeChangeStart', function(event, next, current){
 				if (next.$$route.authenticated == true){	// if this page needs to be authenticated to access
 						if (!Auth.isLoggedIn()) {			// if the user is not logged in

@@ -13,8 +13,9 @@ angular.module('postServices', [])
 };
 
   return postFactory;
-})
+});
 
+/*
 .service('postImgUpload', function($http) {
     this.upload = function(ngPostImgFile) {  //parsed file gets passed into this function of the service
         var fd = new FormData();
@@ -25,3 +26,4 @@ angular.module('postServices', [])
         });
     };
 });
+*/

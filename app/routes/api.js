@@ -2,13 +2,20 @@ var User = require('../models/user'); // 1 period means current directory, 2 per
 var Post = require('../models/post');
 var jwt = require('jsonwebtoken');
 var secret = 'edward';
-//var fs = require('fs');
 
+var cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: 'meaneprojectlibrary',
+    api_key: '182348172968189',
+    api_secret: '34OvWnPzauLf6Fj4vgNivmdLZw8'
+});
+/*
 //test with formdata image uploads
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/app/publicUploads/');
+        // IMPORTANT: On Heroku, the path of api.js is /app/app/routes whereas in localhost, it is /meaneprojectlibrary/app/routes. Heroku switches meaneprojectlibrary with app
+        //cb(null, './public/app/publicUploads/');
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
@@ -32,7 +39,7 @@ var upload = multer({
 }).single('postImg');
 
 //end test formdata image upload
-
+*/
 
 // exports the route to the user
 module.exports = function(router) { // need to export so that we can import into our server.js file
@@ -454,21 +461,57 @@ module.exports = function(router) { // need to export so that we can import into
 
   //test
   router.post('/posts', function(req, res){   // USER REGISTRATION ROUTE
-    var post = new Post();
-    post.title = req.body.postTitle;
-    post.postDescription = req.body.postDescription;
-    post.postAuthor = req.body.postAuthor;
-    post.date = req.body.date;
-    if(req.body.postImg == undefined && req.body.contentType == undefined) {
+    if(req.body.postImg == undefined && req.body.contentType == undefined) {  // if no image provided, use placeholder
+      var post = new Post();
+      post.title = req.body.postTitle;
+      post.postDescription = req.body.postDescription;
+      post.postAuthor = req.body.postAuthor;
+      post.date = req.body.date;
+      //
       post.postImg.data = '/app/views/uploads/images/placeholder.png';
       post.postImg.contentType = "image/png";
       post.postImgUrl = '/app/views/uploads/images/placeholder.png'
-    } else {
-      post.postImg.data = req.body.postImg;
-      post.postImg.contentType = req.body.contentType;
-      post.postImgUrl = req.body.postImgUrl;
-    }
+      post.save(function(err) {
+        if (err) {
+          res.json({ success: false, message: "failed"});
+        }
+        else {
+          res.json({ success: true, message: "Post has been created!"});
+        }
 
+      }); // post.save
+    } else {  // else if image provided
+      // check file size and file type
+      var fileType = req.body.contentType;
+      if (req.body.postImg.size > 10 * 1024 * 1024) { // converting bytes to kb to mb
+          res.json({ success: false, message: "File size is too large. Max limit is 10MB" });
+      } else if ( !(fileType == "image/jpeg" || fileType == "image/jpg" || fileType == "image/png") ) {
+          res.json({ success: false, message: "Filetype is invalid. Must be .png, .jpeg, jpg" });
+      }
+      else { // else if image size and contentType is valid
+        cloudinary.uploader.upload(req.body.postImg, function(result) { //req.body.postImg contains the full base64 encoded string which we can use to use cloudinary api for upload
+          var resultUrl = result['url'];  //postImgUrl not saving atm
+          var post = new Post();
+          post.title = req.body.postTitle;
+          post.postDescription = req.body.postDescription;
+          post.postAuthor = req.body.postAuthor;
+          post.date = req.body.date;
+          post.postImg.data = req.body.postImg;
+          post.postImg.contentType = req.body.contentType;
+          post.postImgUrl = resultUrl;
+          post.save(function(err) {
+            if (err) {
+              res.json({ success: false, message: "failed to save"});
+            }
+            else {
+              res.json({ success: true, message: "Post has been created!"});
+            }
+
+          }); // post.save
+        }); //cloudinary upload
+      }
+    } // end of else for if image provided
+/*
     if (req.body.postTitle == null || req.body.postTitle == '') {
       res.json({ success: false, message: 'Ensure required fields are provided'});
     }
@@ -483,16 +526,17 @@ module.exports = function(router) { // need to export so that we can import into
 
       });
     }
-
-  });
+*/
+  }); // router.post
   //END OF test
 
+/*
   // multer test post route image upload
   router.post('/upload', function(req, res) {
       upload(req, res, function(err) {
           if (err) {
               if (err.code === 'LIMIT_FILE_SIZE') {
-                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
+                  res.json({ success: false, message: 'File size is too large. Max limit is 10MB'});
               } else if (err.code === 'filetype') {
                   res.json({ success: false, message: 'Filetype is invalid. Must be .png, .jpeg, jpg' });
               } else {
@@ -508,7 +552,7 @@ module.exports = function(router) { // need to export so that we can import into
       });
   });
   // end multer test image upload
-
+*/
 
   return router;
 }
