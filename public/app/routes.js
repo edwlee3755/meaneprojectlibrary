@@ -59,6 +59,12 @@ var app = angular.module('appRoutes', ['ngRoute'])
 			permission: ['admin', 'moderator']
 	})
 
+	.when('viewPost/:id', {
+			templateUrl: 'app/views/pages/viewPost.html',
+			controller: 'homeCtrl',
+			controllerAs: 'home',
+	})
+
 	.otherwise({ redirectTo: '/'} ); // if users type in anything else, redirect to home
 
   // this is to get rid of angular's default '#' in the url (ie localhost/#/home)
