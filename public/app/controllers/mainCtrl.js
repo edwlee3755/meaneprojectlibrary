@@ -167,7 +167,8 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
                     // redirect to home page - after a timeout run a function which redirects
                     $timeout(function(){
                       $location.path('/');
-                      app.successMsg = false; // clear out login form data successful login msg once we are logged in
+                      $route.reload();
+                      app.successMsg = false; // clear out login form data successful login msg once we submit
                     }, 2000);
                 }
                 else {
@@ -210,6 +211,7 @@ angular.module('mainController', ['authServices', 'userServices', 'postServices'
                     // redirect to home page - after a timeout run a function which redirects
                     $timeout(function(){
                       $location.path('/');
+                      $route.reload();
                       app.successMsg = false; // clear out login form data successful login msg once we are logged in
                     }, 2000);
                 }

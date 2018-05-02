@@ -11,7 +11,8 @@ var PostSchema = new postSchema({
   postImg: { data: String, contentType: String},
   postImgUrl: { type: String},
   upvotes: { type: Number, default: 0},
-  downvotes: { type: Number, default: 0}
+  downvotes: { type: Number, default: 0},
+  postComments: [String]
 });
 
 

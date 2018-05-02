@@ -94,66 +94,78 @@
                   </div>                <!-- /Modal Content -->
             </div>                      <!-- Modal Dialog model-lg -->
         </div>                          <!-- Modal fade -->
+
+        <!-- View Post Modal-->
+        <div class="modal fade" id="viewPostModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                  <div class="modal-content divExpand" style="background-color:rgb(250,250,250)">
+                      <div class="modal-body">
+                          <form name="viewPostForm" class="form-vertical" novalidate>
+                              <div style="padding-left: 20px; padding-right: 20px; padding-top: 20px;" class="form-group divExpand">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <div>
+                                    <h3 id='viewPostTitle'><span style="color:#212F3D">{{ home.title }}</span></h3>
+                                  </div>
+
+                                  <hr>
+
+                                  <div>
+                                    <p id='viewPostDescription' style="font-size:120%;"><span style="color:#212F3D">{{ home.postDescription }}</span></p>
+                                  </div>
+
+                                  <div ng-show="home.imageSaved">
+                                    <br>
+                                    <img class="postImgThumbnail"  src="{{ home.postImgUrl }}">
+                                  </div>
+                                  <hr>
+                                  <label>Comments:</label>
+                                  <!-- Show comments here -->
+                                  <div ng-repeat="comment in home.postComments track by $index">
+                                        <p class="commentText">
+                                          {{comment}}
+                                        </p>
+                                  </div>
+                                  <div ng-show="main.isLoggedIn">
+                                    <div>
+                                      <textarea class="form-control" ng-model="viewPostCreateComment" name="viewPostCreateComment" rows="2" style="margin-top: 0px; margin-bottom: 0px;" maxlength="200" placeholder="Write a comment..."></textarea>
+                                      <br>
+                                      <button type="button" class="btn btn-secondary btn-sm" ng-click="home.viewPostModal(post, viewPostCreateComment);">Submit</button>
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <br>
+                                  <button type="button" class="btn btn-secondary" style="float: right;" data-dismiss="modal">Close</button>
+                                  <br>
+                              </div>      <!-- /style padding div -->
+                          </form>
+                      </div>            <!-- /Modal Body -->
+                  </div>                <!-- /Modal Content -->
+            </div>                      <!-- Modal Dialog model-lg -->
+        </div>                          <!-- View Post Modal fade -->
+
       </div>                            <!--  Page Header -->
 
-      <!-- test bootsnipp -->
-
-        <div class="row" style="padding-left: 20px; padding-right: 20px;">
-        <div class="row">
-            <div class="col-xs-12 col-sm-3 col-md-3">
-                <a href="#">
-                    <img src="http://wanderluxe.theluxenomad.com/wp-content/uploads/2014/09/http-barbacoabali.com_.jpg" class="img-responsive img-box img-thumbnail">
-                </a>
-            </div>
-            <div class="col-xs-12 col-sm-9 col-md-9">
-                <h4><a href="#">Top 8 Best Bali Restaurants - WanderLuxe Magazine</a></h4>
-            </div>
-            <div class="col-xs-12 col-sm-9 col-md-9" style="height: 140px;">
-                  <div class="alignBottom">
-                      <div>
-                        <p>
-                          We know that there’s tons to noms in Bali, but what’s the best and where are they? Here are our top 8 Seminyak Bali restaurants to visit.
-                      </p>
-                      </div>
-                      <div>
-                        <p><small>
-                              <i class="glyphicon glyphicon-user"></i> By Edward |
-                              <i class="glyphicon glyphicon-calendar"></i> Sept. 2nd, 2018 |
-                              <i class="glyphicon glyphicon-thumbs-up"></i> 13 Likes |
-                              <i class="glyphicon glyphicon-comment"></i> 8 Comments
-                          </small>
-                       </p>
-                      </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        </div>
-
-      <!-- END OF test bootsnipp data:image/png;base64,{{post.postImg.data}}  //   onerror="this.src='https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png';"-->
       <div class="row" style="padding-left: 20px; padding-right: 20px;" ng-repeat="post in home.posts">
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3">
-                <a href="#">
-                    <a href="/viewPost/{{ post._id }}"><img src="{{ post.postImgUrl }}" alt="Image not found" class="img-responsive img-box img-thumbnail"/></a>
-                </a>
+                <img src="{{ post.postImgUrl }}" alt="Image not found" ng-click="home.viewPostModal(post, viewPostCreateComment);" class="img-responsive img-box img-thumbnail newsFeedPostTitle"/>
             </div>
             <div class="col-xs-12 col-sm-9 col-md-9">
-                <h4><a href="#">{{ post.title }}</a></h4>
+                <h4 class="newsFeedPostTitle" ng-click="home.viewPostModal(post, viewPostCreateComment);">{{ post.title }}</h4>
             </div>
-            <div class="col-xs-12 col-sm-9 col-md-9" style="height: 140px;">
+            <div class="col-xs-12 col-sm-9 col-md-9" style="height: 110px;">
                   <div class="alignBottom">
                       <div>
                         <p>
-                          {{ post.postDescription }}
-                      </p>
+                          {{ post.postDescription.substring(0,150); }}{{post.postDescription.substring(150).replace(post.postDescription.substring(150), "...");}}
+                        </p>
                       </div>
                       <div>
                         <p><small>
                               <i class="glyphicon glyphicon-user"></i> By {{ post.postAuthor }} |
                               <i class="glyphicon glyphicon-calendar"></i> {{ post.date }} |
                               <i class="glyphicon glyphicon-thumbs-up"></i> {{ post.upvotes }} Likes |
-                              <i class="glyphicon glyphicon-comment"></i> 8 Comments
+                              <i class="glyphicon glyphicon-comment"></i> {{post.postComments.length }} Comments
                           </small>
                        </p>
                       </div>

@@ -282,6 +282,29 @@ module.exports = function(router) { // need to export so that we can import into
       });
   });
 
+  router.put('/saveComment', function(req, res) {
+      var editPost = req.body._id;
+
+      Post.findOne({ _id: editPost }, function (err, post) {
+        if (err) throw err;
+        if (!post) {
+          res.json({ success: false, message: 'No post was found'});
+        } else {
+          //post.postComments.set(postComments.length, req.body.comment);
+          //post.postComments.push(req.body.comment);
+          post.postComments = req.body.postComments;
+          //post.title = req.body.comment;
+          post.save(function(err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json({ success: true, message: 'Post comments have been updated!' });
+            }
+          });
+        }
+      });
+  });
+
   router.put('/editUser', function(req, res) {
       var editUser = req.body._id;
 

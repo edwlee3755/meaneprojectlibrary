@@ -11,6 +11,10 @@
 textarea[name=postDescription] { /* For textarea with name=noSizeTextArea */
   resize: none;
 }
+textarea[name=viewPostCreateComment] { /* For textarea with name=noSizeTextArea */
+  resize: none;
+  width: 50%;
+}
 
 /* END OF Non resizable text area */
 
@@ -146,9 +150,27 @@ textarea[name=postDescription] { /* For textarea with name=noSizeTextArea */
 .row-float{margin-top: -40px;}
 .explore a {color: green; font-size: 13px;font-weight: 600}
 .twitter a {color:#4099FF}
-.img-box{box-shadow: 0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23);border-radius: 2px;border: 0; max-width: 250px; max-height: 166px; width: 100%; height: 100%;}
+.img-box{box-shadow: 0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23);border-radius: 2px;border: 0s; max-width: 250px;  height: 170px; max-height: 145px; width: 100%; height: 100%;}
 
 /* END OF News Feed CSS */
+
+/* NEWS FEED Post Title CSS */
+
+.newsFeedPostTitle {
+  color: #EB6864;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+.newsFeedPostTitle:hover {
+  cursor:pointer;
+  color: #e22620;
+  text-decoration: underline;
+}
+
+
+/*  END OF News Feed Post Title    */
 
 /* Text at bottom of news feed post  */
 
@@ -158,8 +180,36 @@ textarea[name=postDescription] { /* For textarea with name=noSizeTextArea */
   height: 100%;
   word-wrap: break-word;
   justify-content: space-between;
+}
+/* END OF Text at Bottom post */
 
-
+/* Comment text in view post modal */
+.commentText {
+  word-wrap: break-word;
+  border:1px solid;
+  border-radius: 15px;
+  padding: 10px;
+  overflow: auto;
 }
 
-/* END OF Text at Bottom post */
+.divExpand {
+  overflow: auto;
+}
+/* END OF Comment text in view post modal */
+
+/* View Post Modal Comments */
+.comment-box .media-body p {
+    border: 1px solid #ddd;
+    padding: 2px;
+}
+.comment-box .media-body .media p {
+    margin-bottom: 0;
+}
+.comment-box .media-heading {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    position: relative;
+    margin-bottom: -1px;
+}
+
+/* END OF View Post Modal Comments */

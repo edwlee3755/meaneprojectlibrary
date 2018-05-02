@@ -12,6 +12,14 @@ angular.module('postServices', [])
     return $http.get('/api/getPosts');
 };
 
+  postFactory.getPost = function(id) {
+    //return $http.get('/api/getPost', id)
+  };
+
+  postFactory.saveComment = function(id) {
+      return $http.put('/api/saveComment', id)
+  };
+
   return postFactory;
 });
 
