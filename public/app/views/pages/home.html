@@ -157,7 +157,7 @@
                   <div class="alignBottom">
                       <div>
                         <p>
-                          {{ post.postDescription.substring(0,150); }}{{post.postDescription.substring(150).replace(post.postDescription.substring(150), "...");}}
+                          {{ post.postDescription.substring(0,150); }}<span ng-show="post.postDescription.length > 149">{{post.postDescription.substring(150).replace(post.postDescription.substring(150), "...");}}</span>
                         </p>
                       </div>
                       <div>
@@ -165,7 +165,7 @@
                               <i class="glyphicon glyphicon-user"></i> By {{ post.postAuthor }} |
                               <i class="glyphicon glyphicon-calendar"></i> {{ post.date }} |
                               <i class="glyphicon glyphicon-thumbs-up"></i> {{ post.upvotes }} Likes |
-                              <i class="glyphicon glyphicon-comment"></i> {{post.postComments.length }} Comments
+                              <i class="glyphicon glyphicon-comment"></i> {{post.postComments.length }} Comment<span ng-show="post.postComments.length > 1">s</span>
                           </small>
                        </p>
                       </div>
